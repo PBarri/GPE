@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>GPE by PBarri</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>GPE</h1>
+        <h2>Gestor de Proyectos y Equipos</h2>
+        <a href="https://github.com/PBarri/GPE" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="gpe" class="anchor" href="#gpe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>GPE</h1>
+
+<h2>
+<a id="gestión-de-proyectos-y-equipos" class="anchor" href="#gesti%C3%B3n-de-proyectos-y-equipos" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Gestión de Proyectos y Equipos</h2>
+
+<p>La aplicación <strong>GPE</strong>, <em>(Gestión de Proyectos y Equipos)</em>, es un sistema pensado para gestionar de forma más eficiente proyectos de software basados
+en la metodología Métrica V3.</p>
+
+<p>El alcance actual del proyecto se centrará en la planificación temporal de los proyectos, teniendo previstas futuras ampliaciones.</p>
+
+<p>El proyecto cuenta actualmente con las siguientes funcionalidades:</p>
+
+<ul>
+<li>
+<strong>Gestión de Proyectos</strong>
+
+<ul>
+<li>Dashboard</li>
+<li>Listado de proyectos</li>
+<li>Listado de requerimientos</li>
+<li>Creación de proyectos</li>
+<li>Creación de requerimientos</li>
+<li>Planificación temporal</li>
+</ul>
+</li>
+<li>
+<strong>Gestión de tareas</strong>
+
+<ul>
+<li>Listado de tareas</li>
+<li>Imputar horas trabajadas</li>
+<li>Creación de tareas</li>
+<li>Asignación de tareas</li>
+</ul>
+</li>
+<li>
+<strong>Gestión de usuarios</strong>
+
+<ul>
+<li>Creación de usuarios</li>
+<li>Listado de usuarios</li>
+<li>Edición del perfil de usuario</li>
+<li>Gestión de vacaciones</li>
+<li>Gestión de ausencias</li>
+<li>Gestión de horarios</li>
+</ul>
+</li>
+<li>
+<strong>Módulo de informes</strong>
+
+<ul>
+<li>Informe de situación</li>
+<li>Informe de imputaciones</li>
+<li>Informe de usuarios</li>
+</ul>
+</li>
+</ul>
+
+<p>A continuación se detallará información sobre el proyecto. Para pasar a la guía rápida, pulse <a href="#guiarapida">aquí</a></p>
+
+<h2>
+<a id="estructura-del-proyecto" class="anchor" href="#estructura-del-proyecto" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Estructura del Proyecto</h2>
+
+<p>El proyecto se divide en 4 módulos diferentes: <code>utils</code>, <code>data</code>, <code>batch</code> y <code>web</code>.</p>
+
+<ul>
+<li>El módulo <code>utils</code> es un proyecto java que contiene clases de utilidad para el resto de módulos.</li>
+<li>El módulo <code>data</code> es una aplicación de tipo <strong>Spring Boot</strong>, encargada de la capa de acceso a datos.</li>
+<li>El módulo <code>batch</code> es una aplicación web de tipo <strong>Spring Boot</strong>, encargada de planificar y realizar los trabajos diarios.</li>
+<li>El módulo <code>web</code> es una aplicación web de tipo <strong>Spring Boot</strong>, encargada de la visualización de la aplicación.</li>
+</ul>
+
+<h3>
+<a id="estructura-de-directorios" class="anchor" href="#estructura-de-directorios" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Estructura de directorios</h3>
+
+<pre><code>gpe/
+  batch/
+    src/
+      main/
+        java/
+          batch/                  --&gt; *directorios correspondientes a paquetes omitidos*
+            appConfig/              --&gt; Paquete con las clases de configuración
+            jobs/                   --&gt; Paquete con los distintos jobs
+            listeners/              --&gt; Paquete con los listeners   
+            BatchApplication.java   --&gt; Clase principal Spring Boot
+        resources/
+        webapp/
+      test/
+  data/
+    src/
+      main/
+        java/
+          data/
+            converters/             --&gt; Paquete con todos los convertidores
+            dto/                    --&gt; Paquete con los dtos necesarios
+            enums/                  --&gt; Enumerados de la aplicación (datos paramétricos)
+            exceptions/             --&gt; Excepciones
+            filters/                --&gt; Interfaces con los filtros disponibles para cada entidad
+            model/                  --&gt; Entidades JPA
+            repositories/           --&gt; Repositorios de JPA
+            services/               --&gt; Servicios de la aplicación
+            DataConfiguration.java  --&gt; Clase de configuración
+      test/
+  utils/
+    src/
+      main/
+        java/
+          utils/                    --&gt; Paquete con todas las clases de utilidad
+  web/
+    src/
+      main/
+        java/
+          web/                      --&gt; *directorios correspondientes a paquetes omitidos*
+            aspects/                --&gt; Clases de AspectJ
+            config/                 --&gt; Paquete con las clases de configuración
+            controllers/            --&gt; Paquete con los controladores de JSF
+            exceptions/             --&gt; Paquete con las excepciones
+            primefaces/             --&gt; Paquete con las modificaciones de Primefaces
+            utils/                  --&gt; Paquete con las utilidades propias del proyecto web
+            WebApplication.java     --&gt; Clase principal Spring Boot
+        resources/
+        webapp/
+          css/                      --&gt; Carpeta con todos los archivos css
+          error/                    --&gt; Carpeta que contiene las páginas de error
+          font/                     --&gt; Carpeta con las fuentes
+          img/                      --&gt; Carpeta con las imágenes usadas en la aplicación
+          js/                       --&gt; Carpeta con los archivos javascript usados en la aplicación
+          views/                    --&gt; Carpeta con las distintas vistas de la aplicación
+          WEB-INF/                  --&gt; Carpeta conteniendo los archivos necesarios para formar el WAR
+          index.xhtml               --&gt; Página principal de la aplicación
+          login.html                --&gt; Página del login
+      test/
+</code></pre>
+
+<h2>
+<a id="arquitectura" class="anchor" href="#arquitectura" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arquitectura</h2>
+
+<h3>
+<a id="instalación-standalone" class="anchor" href="#instalaci%C3%B3n-standalone" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instalación standalone</h3>
+
+<p><img src="https://github.com/PBarri/GPE/blob/master/lib/diagrama1.png" alt="diagramadesplieuge"></p>
+
+<h3>
+<a id="docker" class="anchor" href="#docker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Docker</h3>
+
+<p><em>En Construcción</em></p>
+
+<h2>
+<a id="entorno-de-desarrollo" class="anchor" href="#entorno-de-desarrollo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Entorno de desarrollo</h2>
+
+<p>Para la ejecución del proyecto se han utilizado las siguientes tecnologías:</p>
+
+<ul>
+<li>Java jdk 1.8</li>
+<li>JBoss Wildfly 9+</li>
+<li>Gradle 3.1</li>
+<li>Oracle Database 11g</li>
+<li>Spring Boot 1.4.2
+
+<ul>
+<li>Spring Web</li>
+<li>Spring Security</li>
+<li>Spring Data JPA</li>
+<li>Spring AOP</li>
+<li>Spring Batch</li>
+<li>Spring Integration</li>
+</ul>
+</li>
+<li>JSF 2.2</li>
+<li>Primefaces 6.0</li>
+<li>jQuery 1.9</li>
+<li>QueryDsl 4</li>
+<li>Google Charts</li>
+</ul>
+
+<h2>
+<a id="guía-rápida" class="anchor" href="#gu%C3%ADa-r%C3%A1pida" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a name="guiarapida"></a>Guía Rápida</h2>
+
+<h3>
+<a id="instalar-dependencias" class="anchor" href="#instalar-dependencias" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instalar dependencias</h3>
+
+<p>Para gestionar las dependencias hemos usado la herramienta <a href="https://gradle.org/">gradle</a>.</p>
+
+<p>Se ha preconfigurado <code>gradle</code> para automáticamente compilar y montar el proyecto, de forma que, en una terminal situada
+en la raíz del proyecto, ejecutamos:</p>
+
+<pre><code>gradlew dist
+</code></pre>
+
+<p>Este comando realizará las siguientes acciones:</p>
+
+<ul>
+<li>Compilará el código fuente de todos los módulos</li>
+<li>Creará los archivos war de los módulos <code>batch</code> y <code>web</code>
+</li>
+<li>Moverá estos archivos a la carpeta <code>dist</code>
+</li>
+</ul>
+
+<p><em><em>NOTA: Para instalar en Eclipse, necesitarás instalar el plugin  <a href="https://projects.eclipse.org/projects/tools.buildship">Buildship</a>, y después importar el proyecto.</em></em></p>
+
+<h3>
+<a id="ejecutar-la-aplicación" class="anchor" href="#ejecutar-la-aplicaci%C3%B3n" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ejecutar la aplicación</h3>
+
+<p><em><strong>NOTA:Una vez arrancada la aplicación, se podrá acceder a ella con el usuario y contraseña Admin/Admin</strong></em></p>
+
+<h4>
+<a id="docker-1" class="anchor" href="#docker-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Docker</h4>
+
+<p>Se ha preconfigurado <a href="https://www.docker.com/">Docker</a>, junto con dos tareas de <code>gradle</code> para poder crear y ejecutar la aplicación
+dentro de un contenedor de Docker.</p>
+
+<pre><code>gradlew dockerBuild
+</code></pre>
+
+<p>Esta tarea creará un contenedor de Docker con el nombre <code>pbarri\gpe</code></p>
+
+<pre><code>gradlew dockerRun
+</code></pre>
+
+<p>Esta tarea ejecutará el contenedor anterior.</p>
+
+<p>Después de ejecutar esta tarea, la aplicación estará disponible en <code>http://localhost:8080/GPE</code>.</p>
+
+<p><em><em>NOTA: Necesitarás tener Docker instalado en tu ordenador para usar esta funcionalidad</em></em></p>
+
+<h4>
+<a id="servidor-de-aplicaciones" class="anchor" href="#servidor-de-aplicaciones" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Servidor de aplicaciones</h4>
+
+<p>Para ejecutar la aplicación, simplemente tendremos que ejecutar el comando de <code>gradle</code></p>
+
+<pre><code>gradlew dist
+</code></pre>
+
+<p>Se creará una carpeta, <code>dist</code>, en la raíz del proyecto con los archivos war tanto de la parte batch como de la web.</p>
+
+<p>Habrá que desplegar estos archivos en nuestro servidor de aplicaciones.</p>
+
+<h2>
+<a id="versionado-de-la-aplicación" class="anchor" href="#versionado-de-la-aplicaci%C3%B3n" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versionado de la aplicación</h2>
+
+<p>Este proyecto sigue el versionado semántico, con el formato <code>MAJOR.MINOR.PATCH</code>.</p>
+
+<p>Dado una versión, habrá que incrementar:</p>
+
+<ul>
+<li>
+<code>MAJOR</code> cuando se hayan introducido cambios incompatibles con la API anterior. </li>
+<li>
+<code>MINOR</code> cuando se ha introducido nueva funcionalidad compatible hacia atrás con la API existente. </li>
+<li>
+<code>PATCH</code> para resolución de bugs con compatibilidad hacia atrás.</li>
+</ul>
+
+<p>Ademas, se han incluido dos etiquetas, <code>SNAPSHOT</code> and <code>RELEASE</code> para distinguir entre candidatos a una nueva versión estable y las versiones estables.</p>
+
+<p>Para ayudar con el versionado, se han incluído tareas de gradle para cambiar la versión. A continuación se muestran los comandos necesarios para crear
+una nueva versión:</p>
+
+<ul>
+<li><code>gradlew majorRelease dist</code></li>
+<li><code>gradlew minorRelease dist</code></li>
+<li><code>gradlew patchRelease dist</code></li>
+<li><code>gradlew majorSnapshot dist</code></li>
+<li><code>gradlew minorSnapshot dist</code></li>
+<li><code>gradlew patchSnapshot dist</code></li>
+</ul>
+
+<p><em>NOTA: En la versión actual, el archivo <code>gradle.properties</code> debe ser subido al repositorio de forma manual después de cambiar la versión.</em></p>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
+
+<p><code>SECCIÓN EN PROGRESO</code></p>
+
+<h2>
+<a id="bibliografía" class="anchor" href="#bibliograf%C3%ADa" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bibliografía</h2>
+
+<ul>
+<li><a href="http://administracionelectronica.gob.es/pae_Home/pae_Documentacion/pae_Metodolog/pae_Metrica_v3.html">Documentación Metrica V3</a></li>
+<li><a href="https://spring.io/">Documentación Spring</a></li>
+<li><a href="http://www.primefaces.org/">Documentación Primefaces</a></li>
+<li><a href="http://gradle.org/">Documentación Gradle</a></li>
+<li><a href="http://stackoverflow.com/">Stackoverflow</a></li>
+</ul>
+
+<h1>
+<a id="licencia" class="anchor" href="#licencia" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Licencia</h1>
+
+<p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Licencia de Creative Commons" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a><br>GPE by Pablo Barrientos is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Reconocimiento-NoComercial-CompartirIgual 4.0 Internacional License</a>.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/PBarri/GPE/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/PBarri/GPE/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/PBarri/GPE"></a> is maintained by <a href="https://github.com/PBarri">PBarri</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
