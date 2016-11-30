@@ -1,0 +1,392 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div id="overview-projectInfo" class="project-overview-tab">
+		<div class="tab-section-title">
+			<h2>
+				<i class="fa fa-briefcase"></i>#{msg['projects.new.wizard.overview.projectInfo']}
+			</h2>
+		</div>
+		<div class="tab-section-content">
+			<div class="row">
+				<div id="overview-logo-container" class="project-logo-container col-xs-12 col-md-2">
+					<p:panel id="overview-logo" styleClass="square-box" rendered="#{empty newProjectController.newProject.projectLogo}">
+						<div class="square-content">
+							<p:panel styleClass="project-logo-avatar">
+								<h:outputText
+									value="#{newProjectController.newProject.projectTitle}" />
+							</p:panel>
+						</div>
+					</p:panel>
+					<p:panel rendered="#{not empty newProjectController.newProject.projectLogo}">
+						<p:graphicImage value="#{newProjectController.newProject.projectLogo}" styleClass="img-responsive" />
+					</p:panel>
+				</div>
+				<div id="overview-project" class="col-xs-12 col-md-10">
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['projects.new.wizard.title']}"
+							for="overviewProjectTitle" />
+						<div class="col-xs-8">
+							<p:inputText id="overviewProjectTitle" disabled="true"
+								value="#{newProjectController.newProject.projectTitle}" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['projects.new.wizard.name']}"
+							for="overviewProjectName" />
+						<div class="col-xs-8">
+							<p:inputText id="overviewProjectName" disabled="true"
+								value="#{newProjectController.newProject.name}" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['projects.new.wizard.code']}"
+							for="overviewProjectCode" />
+						<div class="col-xs-8">
+							<p:inputText id="overviewProjectCode" disabled="true"
+								value="#{newProjectController.newProject.projectCode}" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['projects.new.wizard.cvsCode']}"
+							for="overviewProjectCvsCode" />
+						<div class="col-xs-8">
+							<p:inputText id="overviewProjectCvsCode" disabled="true"
+								value="#{newProjectController.newProject.cvsCode}" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12">
+						<p:outputLabel styleClass="col-xs-12"
+							value="#{msg['projects.new.wizard.description']}"
+							for="overviewProjectDescription" />
+						<div class="col-xs-12">
+							<p:inputTextarea id="overviewProjectDescription" disabled="true"
+								value="#{newProjectController.newProject.description}" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="overview-usersInfo" class="project-overview-tab">
+		<div class="tab-section-title">
+			<h2>
+				<i class="fa fa-users"></i>#{msg['projects.new.wizard.overview.usersInfo']}
+			</h2>
+		</div>
+		<div class="tab-section-content">
+			<div class="row">
+				<div class="minimal-card-list">
+					<div class="col-xs-12 col-md-4 minimal-card">
+						<div class="minimal-card-wrapper">
+							<p:panel styleClass="icon img-circle"
+								rendered="#{empty newProjectController.leader.photoUrl}">
+								<h:outputText value="#{newProjectController.leader.avatar}" />
+							</p:panel>
+							<p:graphicImage styleClass="icon img-responsive img-circle"
+								rendered="#{not empty newProjectController.leader.photoUrl}"
+								value="#{newProjectController.leader.photoUrl}" />
+							<div class="info">
+								<div class="name">
+									<p:outputLabel
+										value="#{newProjectController.leader.name} #{newProjectController.leader.surname}" />
+								</div>
+								<div class="identifier">
+									<p:outputLabel
+										value="#{newProjectController.leader.identifier}" />
+								</div>
+								<div class="category">
+									<p:outputLabel
+										value="#{msg['role.project.leader']}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<ui:repeat var="manager" value="#{newProjectController.managers}">
+						<div class="col-xs-12 col-md-4 minimal-card">
+							<div class="minimal-card-wrapper">
+								<p:panel styleClass="icon img-circle"
+									rendered="#{empty manager.photoUrl}">
+									<h:outputText value="#{manager.avatar}" />
+								</p:panel>
+								<p:graphicImage styleClass="icon img-responsive img-circle"
+									rendered="#{not empty manager.photoUrl}"
+									value="#{manager.photoUrl}" />
+								<div class="info">
+									<div class="name">
+										<p:outputLabel value="#{manager.name} #{manager.surname}" />
+									</div>
+									<div class="identifier">
+										<p:outputLabel value="#{manager.identifier}" />
+									</div>
+									<div class="category">
+										<p:outputLabel
+											value="#{msg['role.project.manager']}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</ui:repeat>
+					<ui:repeat var="dev" value="#{newProjectController.developers}">
+						<div class="col-xs-12 col-md-4 minimal-card">
+							<div class="minimal-card-wrapper">
+								<p:panel styleClass="icon img-circle"
+									rendered="#{empty dev.photoUrl}">
+									<h:outputText value="#{dev.avatar}" />
+								</p:panel>
+								<p:graphicImage styleClass="icon img-responsive img-circle"
+									rendered="#{not empty dev.photoUrl}" value="#{dev.photoUrl}" />
+								<div class="info">
+									<div class="name">
+										<p:outputLabel value="#{dev.name} #{dev.surname}" />
+									</div>
+									<div class="identifier">
+										<p:outputLabel value="#{dev.identifier}" />
+									</div>
+									<div class="category">
+										<p:outputLabel
+											value="#{msg['role.user']}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</ui:repeat>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<div id="overview-requirementInfo" class="project-overview-tab">
+		<div class="tab-section-title">
+			<h2>
+				<i class="fa fa-list-ul"></i>#{msg['projects.new.wizard.overview.requirementInfo']}
+			</h2>
+		</div>
+		<div class="tab-section-content">
+			<div id="overview-tasksInfo" class="row">
+				<div class="col-xs-12 col-md-3">
+					<div class="row">
+						<div class="form-group clearfix">
+							<div class="col-xs-12 no-left-padding">
+								<p:outputLabel
+									value="#{msg['projects.new.wizard.requirement.name']}"
+									for="overviewReqName" />
+							</div>
+							<div class="col-xs-12 no-left-padding">
+								<p:inputText id="overviewReqName" disabled="true"
+									value="#{newProjectController.newRequirement.name}" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group clearfix">
+							<div class="col-xs-12 no-left-padding">
+								<p:outputLabel
+									value="#{msg['projects.new.wizard.requirementCode']}"
+									for="overviewReqCode" />
+							</div>
+							<div class="col-xs-12 no-left-padding">
+								<p:inputText id="overviewReqCode" disabled="true"
+									value="#{newProjectController.newRequirement.requirementCode}" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group clearfix">
+							<div class="col-xs-12 no-left-padding">
+								<p:outputLabel
+									value="#{msg['projects.new.wizard.overview.task.startDate']}"
+									for="startDateRange" />
+							</div>
+							<div class="col-xs-12 no-left-padding">
+								<p:calendar id="startDateRange"
+									value="#{newProjectController.newRequirement.startDate}"
+									disabled="true" locale="es" pattern="dd/MM/yyyy"
+									converter="localDateConverter" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group clearfix">
+							<div class="col-xs-12 no-left-padding">
+								<p:outputLabel
+									value="#{msg['projects.new.wizard.overview.task.endDate']}"
+									for="endDateRange" />
+							</div>
+							<div class="col-xs-12 no-left-padding">
+								<p:calendar id="endDateRange"
+									value="#{newProjectController.newRequirement.endDate}"
+									disabled="true" locale="es" pattern="dd/MM/yyyy"
+									converter="localDateConverter" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group clearfix">
+							<div class="col-xs-12 no-left-padding">
+								<p:outputLabel
+									value="#{msg['projects.new.wizard.requirement.hours']}"
+									for="overviewReqHours" />
+							</div>
+							<div class="col-xs-12 no-left-padding">
+								<p:inputText id="overviewReqHours" disabled="true"
+									value="#{newProjectController.newRequirement.hours}" />
+							</div>
+						</div>
+					</div>
+					<!-- Progress Bar con la información de las horas -->
+					<div class="row">
+						<div class="form-group clearfix">
+							<div class="col-xs-12 no-left-padding">
+								<p:outputLabel
+									value="#{msg['projects.new.wizard.requirement.usedHours']}" />
+							</div>
+							<div class="col-xs-12 no-left-padding">
+								<p:progressBar id="usedHoursProgress"
+									value="#{newProjectController.hoursPercentage}"
+									labelTemplate="{value}%" displayOnly="true" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="newTasksPanel" class="col-xs-12 col-md-9">
+					<div class="tab-section-panel">
+						<div class="panel panel-warning">
+							<div class="panel-heading">
+								<i class="fa fa-warning"></i>#{msg['projects.new.wizard.overview.task.info.header']}
+							</div>
+							<div class="panel-body">
+								<p>#{msg['projects.new.wizard.overview.task.info.content']}</p>
+								<p>#{msg['projects.new.wizard.overview.task.info.content2']}</p>
+							</div>
+						</div>
+					</div>
+					<div class="tab-section-panel">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<i class="fa fa-info"></i>Planificación de tareas
+							</div>
+							<div class="panel-body">
+								<p>Puede asignar las horas y fechas de comienzo y fin de forma manual en la tabla mostrada a continuación.</p>
+								<p>Si lo prefiere, también puede asignarle un peso específico a cada tarea (entre 1 y 5, siendo 5 el más importante), y las tareas serán planificadas de forma automática:</p>
+								<div class="row">
+									<ui:repeat var="t" value="#{newProjectController.newTasks}">
+										<div class="col-xs-12 col-md-9-1">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h:outputText value="PSI" rendered="#{t.taskType.id eq 2}" />
+													<h:outputText value="EV" rendered="#{t.taskType.id eq 3}" />
+													<h:outputText value="ASI" rendered="#{t.taskType.id eq 4}" />
+													<h:outputText value="DSI" rendered="#{t.taskType.id eq 5}" />
+													<h:outputText value="CSI" rendered="#{t.taskType.id eq 6}" />
+													<h:outputText value="IAS" rendered="#{t.taskType.id eq 7}" />
+													<h:outputText value="GPI" rendered="#{t.taskType.id eq 8}" />
+												</div>
+												<div class="panel-body weight-panel">
+													<p:inputText value="#{newProjectController.psiWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 2}" />
+													<p:inputText value="#{newProjectController.evWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 3}" />
+													<p:inputText value="#{newProjectController.asiWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 4}" />
+													<p:inputText value="#{newProjectController.dsiWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 5}" />
+													<p:inputText value="#{newProjectController.csiWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 6}" />
+													<p:inputText value="#{newProjectController.iasWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 7}" />
+													<p:inputText value="#{newProjectController.gpiWeight}" min="1" max="5" type="number" rendered="#{t.taskType.id eq 8}" />
+												</div>
+											</div>
+										</div>
+									</ui:repeat>
+									<div class="col-xs-12 col-md-9-2">
+										<p:commandButton action="#{newProjectController.recalculateProjectTasks()}" 
+											update="taskTable usedHoursProgress" value="Recalcular" styleClass="btn btn-sm btn-primary waves-effect waves-light" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<p:treeTable id="taskTable"
+						value="#{newProjectController.taskTree}" var="task"
+						selectionMode="single" editable="true" editMode="cell">
+						<p:ajax event="collapse"
+							listener="#{newProjectController.onTaskTreeCollapse}"
+							update="createProjectForm:taskTable" />
+						<p:ajax event="cellEdit" global="false"
+							listener="#{newProjectController.onCellEditing}"
+							update="createProjectForm:usedHoursProgress" />
+						<f:facet name="header">
+							#{msg['projects.new.wizard.overview.task']}
+						</f:facet>
+						<p:column
+							headerText="#{msg['projects.new.wizard.overview.task.code']}">
+							<h:outputText value="#{task.code}" />
+						</p:column>
+						<p:column
+							headerText="#{msg['projects.new.wizard.overview.task.hours']}">
+							<p:cellEditor rendered="#{empty task.childs}">
+								<f:facet name="input">
+									<p:inputText type="number" value="#{task.hours}" />
+								</f:facet>
+								<f:facet name="output">
+									<p:inputText disabled="true" value="#{task.hours}" />
+								</f:facet>
+							</p:cellEditor>
+							<h:outputText value="#{task.hours}"
+								rendered="#{not empty task.childs}" />
+						</p:column>
+						<p:column
+							headerText="#{msg['projects.new.wizard.overview.task.startDate']}">
+							<p:cellEditor rendered="#{empty task.childs}">
+								<f:facet name="input">
+									<p:calendar value="#{task.startDate}"
+										converter="localDateTimeConverter" locale="es"
+										pattern="dd/MM/yyyy HH:mm" />
+								</f:facet>
+								<f:facet name="output">
+									<p:calendar value="#{task.startDate}" disabled="true"
+										converter="localDateTimeConverter" locale="es"
+										pattern="dd/MM/yyyy HH:mm" />
+								</f:facet>
+							</p:cellEditor>
+							<h:outputText value="#{task.startDate}"
+								rendered="#{not empty task.childs}">
+								<f:converter converterId="localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{msg['projects.new.wizard.overview.task.endDate']}">
+							<p:cellEditor rendered="#{empty task.childs}">
+								<f:facet name="input">
+									<p:calendar value="#{task.endDate}"
+										converter="localDateTimeConverter" locale="es"
+										pattern="dd/MM/yyyy HH:mm" />
+								</f:facet>
+								<f:facet name="output">
+									<p:calendar value="#{task.endDate}" disabled="true"
+										converter="localDateTimeConverter" locale="es"
+										pattern="dd/MM/yyyy HH:mm" />
+								</f:facet>
+							</p:cellEditor>
+							<h:outputText value="#{task.endDate}"
+								rendered="#{not empty task.childs}">
+								<f:converter converterId="localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+						<p:column id="infoColumn" styleClass="icon-column">
+							<p:graphicImage id="infoColumnImage"
+								value="/img/info-orange-20.png" />
+							<p:tooltip id="infoColumnData" for="infoColumnImage"
+								value="#{task.description}" />
+						</p:column>
+					</p:treeTable>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+
+</ui:composition>

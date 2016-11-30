@@ -1,0 +1,426 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:gpe="http://gpe.org/ui">
+	
+	<ui:include src="assignUserDialog.xhtml" />
+	<ui:include src="newTask.xhtml" />
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-xs-11 col-lg-10">
+			<h2 class="col-xs-11 col-lg-10">
+				<h:outputFormat value="#{msg['menu.tasks.details']}">
+					<f:param value="#{taskDetailsController.task.code}" />
+				</h:outputFormat>
+			</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+	<h:form id="taskDetailsForm">
+		<p:panel class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>Información General</h5>
+				<div class="ibox-tools"></div>
+			</div>
+			<div class="ibox-content">				
+				<div class="form-horizontal without-padding">
+					<div class="row">
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Código Tarea" for="taskCode" />
+							<div class="col-xs-8">
+								<p:inputText id="taskCode" disabled="true"
+									value="#{taskDetailsController.task.code}" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Nombre Tarea" for="taskName" />
+							<div class="col-xs-8">
+								<p:inputText id="taskName" disabled="true"
+									value="#{taskDetailsController.task.name}" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Horas" for="taskHours" />
+							<div class="col-xs-8">
+								<p:inputText id="taskHours" disabled="true"
+									value="#{taskDetailsController.task.hours}">
+									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+								</p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Prioridad" />
+							<div class="col-xs-8">
+								<p:outputLabel styleClass="col-xs-12 btn btn-sm btn-danger text-white"
+									value="#{msg[taskDetailsController.task.taskPriority.description]}" 
+									rendered="#{taskDetailsController.task.taskPriority.id eq 1}" />
+								<p:outputLabel styleClass="col-xs-12 btn btn-sm btn-warning"
+									value="#{msg[taskDetailsController.task.taskPriority.description]}" 
+									rendered="#{taskDetailsController.task.taskPriority.id eq 2}" />
+								<p:outputLabel styleClass="col-xs-12 btn btn-sm btn-info text-white"
+									value="#{msg[taskDetailsController.task.taskPriority.description]}" 
+									rendered="#{taskDetailsController.task.taskPriority.id eq 3}" />
+								<p:outputLabel styleClass="col-xs-12 btn btn-sm btn-info text-white"
+									value="#{msg[taskDetailsController.task.taskPriority.description]}" 
+									rendered="#{taskDetailsController.task.taskPriority.id eq 4}" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Tipo Tarea" />
+							<div class="col-xs-8">
+								<p:inputText id="taskType" disabled="true"
+									value="#{msg[taskDetailsController.task.taskType.description]}" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Estado Tarea" />
+							<div class="col-xs-8">
+								<p:outputLabel id="taskStatus" styleClass="col-xs-12 btn btn-sm"
+									style="background-color: #{taskDetailsController.task.taskStatus.color}" 
+									value="#{msg[taskDetailsController.task.taskStatus.description]}" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="#{msg['projects.detail.startDate']}"
+								for="taskStartDate" />
+							<div class="col-xs-8">
+								<p:inputText id="taskStartDate" disabled="true"
+									value="#{taskDetailsController.task.startDate}" converter="localDateTimeConverter" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Fecha Fin"
+								for="taskEndDate" />
+							<div class="col-xs-8">
+								<p:inputText id="taskEndDate" disabled="true"
+									value="#{taskDetailsController.task.endDate}" converter="localDateTimeConverter" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-4">
+							<p:outputLabel styleClass="control-label col-xs-4"
+								value="Creado Por"
+								for="taskCreatedBy" />
+							<div class="col-xs-8">
+								<p:inputText id="taskCreatedBy" disabled="true"
+									value="#{taskDetailsController.task.createdBy.name} #{taskDetailsController.task.createdBy.surname}" />
+							</div>
+						</div>
+					</div>			
+				</div>
+			</div>
+		</p:panel>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="ibox">
+					<div class="ibox-title float-e-margins">
+						<h5>Progreso</h5>
+					</div>
+					<div class="ibox-content">
+						<p:progressBar id="taskProgress" styleClass="#{taskDetailsController.progressStyleClass()}"
+							value="#{taskDetailsController.task.percentage}"
+							labelTemplate="{value}%" displayOnly="true" />
+						<div class="row">
+							<div class="col-xs-12 col-md-6">
+								<p:panel rendered="#{taskDetailsController.loggedUser.role.id ne 4}">
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-success waves-effect waves-light"
+											rendered="#{taskDetailsController.task.taskStatus.id ne 8}"
+											value="Empezar / Reanudar"
+											action="#{taskDetailsController.startTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-warning waves-effect waves-light"
+											rendered="#{taskDetailsController.task.taskStatus.id ne 8}"
+											value="Parar"
+											action="#{taskDetailsController.stopTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-gray waves-effect waves-light"
+											rendered="#{taskDetailsController.task.taskStatus.id ne 8}"
+											value="Archivar"
+											action="#{taskDetailsController.archiveTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-success waves-effect waves-light"
+											rendered="#{taskDetailsController.task.taskStatus.id eq 8}"
+											value="Aprobar"
+											action="#{taskDetailsController.approveTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-danger waves-effect waves-light"
+											rendered="#{taskDetailsController.task.taskStatus.id eq 8}"
+											value="Rechazar"
+											action="#{taskDetailsController.rejectTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+								</p:panel>
+								<p:panel rendered="#{taskDetailsController.loggedUser.role.id eq 4}">
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-success waves-effect waves-light"
+											value="Empezar / Reanudar"
+											action="#{taskDetailsController.startTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-warning waves-effect waves-light"
+											value="Parar"
+											action="#{taskDetailsController.stopTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+									<div class="form-group">
+										<p:commandButton type="submit" styleClass="col-xs-12 col-md-10 col-md-offset-1 btn-danger waves-effect waves-light"
+											value="Finalizar Tarea"
+											action="#{taskDetailsController.draftTask}"
+											update="taskDetailsForm" />
+										<div class="clearfix"></div>
+									</div>
+								</p:panel>
+							</div>
+							<div class="col-xs-12 col-md-6">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="form-group col-xs-12 col-md-8">
+											<p:outputLabel styleClass="control-label col-xs-4"
+												value="Minutos"
+												for="incurredMinutes" />
+											<div class="col-xs-8">
+												<p:inputText id="incurredMinutes" type="number" value="#{taskDetailsController.newIncurred.minutes}" />
+											</div>										
+										</div>
+										<div class="form-group col-xs-12 col-md-3">
+											<p:outputLabel styleClass="control-label col-xs-8"
+												value="Extra"
+												for="isExtra" />
+											<div class="col-xs-4">
+												<p:selectBooleanCheckbox id="isExtra" value="#{taskDetailsController.newIncurred.extra}" />
+											</div>										
+										</div>
+										<div class="form-group col-xs-12">
+											<p:inputTextarea id="incurredComment" value="#{taskDetailsController.newIncurred.commentary}">
+												<p:watermark for="incurredComment" value="Comentario" />
+											</p:inputTextarea>
+										</div>
+										<div class="form-group col-xs-12">
+											<p:commandButton styleClass="btn btn-sm btn-primary col-xs-12 col-md-4 col-md-offset-4 waves-effect waves-light" value="Imputar"
+												action="#{taskDetailsController.addIncurred}"
+												update="taskDetailsForm" />
+										</div>
+										<div class="clearfix"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-7">
+				<p:panel id="assignedUsers" class="ibox no-padding">
+					<div class="ibox-title float-e-margins">
+						<h5>Usuarios Asignados</h5>
+						<div class="ibox-tools">								
+							<p:commandButton type="button" icon="fa fa-plus" styleClass="add-iboxtools-button" alt="Asignar Usuario"
+								onclick="PF('asignUserDialog').show()" />
+							<a class="collapse-link"><i class="fa fa-chevron-up" /></a>								
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="minimal-card-list">
+							<ui:repeat var="user" value="#{taskDetailsController.task.usersAssigned}">
+								<gpe:card type="user" styleClass="col-xs-12 col-md-6 col-lg-4" value="#{user}" />
+							</ui:repeat>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</p:panel>
+			</div>
+			<div class="col-xs-12 col-md-5">
+				<div class="ibox no-padding">
+					<div class="ibox-title float-e-margins">
+						<h5>Comentarios</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+						</div>
+					</div>
+					<div class="ibox-content scrollbar comments-ibox">
+						<div id="comment-panel">
+							<p:panel class="chat-activity-list" rendered="#{not empty taskDetailsController.task.comments}">
+								<ui:repeat var="comment" value="#{taskDetailsController.task.comments}" varStatus="row">
+									<p:panel styleClass="chat-element" rendered="#{row.index % 2 ne 0}">
+										<p:panel styleClass="pull-left icon img-circle" rendered="#{empty comment.user.photoUrl}">
+											<h:outputText value="#{comment.user.avatar}" />
+										</p:panel>
+										<p:graphicImage styleClass="pull-left img-responsive img-circle" rendered="#{not empty comment.user.photoUrl}"
+											value="#{comment.user.photoUrl}" />
+										<div class="media-body">
+											<small class="pull-right text-navy"></small>
+											<strong><h:outputText value="#{comment.user.name} #{comment.user.surname}" /></strong>
+											<p class="m-b-xs"><h:outputText value="#{comment.commentary}" /></p>
+										</div>
+									</p:panel>
+									<p:panel styleClass="chat-element right" rendered="#{row.index % 2 eq 0}">
+										<p:panel styleClass="pull-right icon img-circle" rendered="#{empty comment.user.photoUrl}">
+											<h:outputText value="#{comment.user.avatar}" />
+										</p:panel>
+										<p:graphicImage styleClass="pull-right img-responsive img-circle" rendered="#{not comment.user.photoUrl}"
+											value="#{comment.user.photoUrl}" />
+										<div class="media-body text-right">
+											<small class="pull-left text-navy"></small>
+											<strong><h:outputText value="#{comment.user.name} #{comment.user.surname}" /></strong>
+											<p class="m-b-xs"><h:outputText value="#{comment.commentary}" /></p>
+										</div>
+									</p:panel>
+								</ui:repeat>
+							</p:panel>
+							<div class="chat-form">								
+								<div class="form-group">
+									<p:inputTextarea styleClass="form-control" value="#{taskDetailsController.newComment.commentary}" />
+								</div>
+								<div class="text-right">
+									<p:commandButton styleClass="btn btn-sm btn-primary m-t-n-xs" value="Enviar Comentario"
+										update="taskDetailsForm" action="#{taskDetailsController.addComment}" />
+									<div class="clearfix"></div>
+								</div>								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>Tareas Hijas</h5>
+				<div class="ibox-tools">
+					<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+				<p:commandButton type="button" icon="fa fa-plus" styleClass="add-datatable-button" onclick="PF('newTaskDialog').show();" />
+				<p:dataTable id="childTable" widgetVar="childTable"
+					var="task" value="#{taskDetailsController.childTasks}"
+					rowKey="#{task.id}" rows="10" paginator="true"
+					paginatorAlwaysVisible="true"
+					paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+					rowsPerPageTemplate="5,10,25,50,75"
+					rowsPerPageLabel="Número de tareas hijas por página: "
+					emptyMessage="No existen tareas para mostrar"
+					selectionMode="single" lazy="true">
+
+					<p:column id="codeColumn" headerText="#{msg['tasks.list.code']}">
+						<h:outputText value="#{task.code}" />
+					</p:column>
+
+					<p:column id="nameColumn" headerText="#{msg['tasks.list.name']}">
+						<h:outputText value="#{task.name}" />
+					</p:column>
+					
+					<p:column id="taskTypeColumn"
+						headerText="#{msg['tasks.list.taskType']}">
+						<h:outputText value="#{msg[task.taskType.description]}" />
+					</p:column>
+					
+					<p:column id="priorityColumn"
+						headerText="#{msg['tasks.list.taskPriority']}">
+						<h:outputText value="#{msg[task.taskPriority.description]}" />
+					</p:column>
+
+					<p:column id="percentageColumn"
+						headerText="#{msg['tasks.list.percentage']}">
+						<h:outputText value="#{task.hours}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="taskStatusColumn"
+						headerText="#{msg['tasks.list.taskStatus']}">
+						<h:outputText value="#{msg[task.taskStatus.description]}" />
+					</p:column>					
+
+					<p:column id="startDateColumn"
+						headerText="#{msg['tasks.list.startDate']}">
+						<h:outputText value="#{task.startDate}" converter="localDateTimeConverter" />
+					</p:column>
+
+					<p:column id="endDateColumn"
+						headerText="#{msg['tasks.list.endDate']}">
+						<h:outputText value="#{task.endDate}" converter="localDateTimeConverter" />
+					</p:column>
+					
+					<p:column id="detailsColumn" styleClass="icon-column">
+					<p:commandButton title="Detalles" update="layoutCenter" process="@form"
+						styleClass="table-button" icon="fa fa-list-alt"
+						actionListener="#{taskDetailsController.goToTaskDetails(task)}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>Imputaciones</h5>
+				<div class="ibox-tools">
+					<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+				<p:dataTable id="incurredTable" widgetVar="incurredTable"
+					var="inc" value="#{taskDetailsController.task.incurreds}"
+					rowKey="#{inc.id}" rows="10" paginator="true"
+					paginatorAlwaysVisible="true"
+					paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+					rowsPerPageTemplate="5,10,25,50,75"
+					rowsPerPageLabel="Número de imputaciones por página: "
+					emptyMessage="No existen imputaciones para mostrar"
+					selectionMode="single" lazy="true">
+
+					<p:column id="userColumn" headerText="Usuario">
+						<h:outputText value="#{inc.user.name} #{inc.user.surname}" />
+					</p:column>
+
+					<p:column id="minutesColumn" headerText="Minutos" styleClass="col-md-1">
+						<h:outputText value="#{inc.minutes}" />
+					</p:column>
+
+					<p:column id="typeColumn" headerText="Tipo" styleClass="col-md-1">
+						<h:outputText rendered="#{inc.extra}" value="Hora Extra" />
+						<h:outputText rendered="#{not inc.extra}" value="Normal" />
+					</p:column>
+					
+					<p:column id="timestampColumn" headerText="Fecha" styleClass="col-md-2">
+						<h:outputText value="#{inc.timestamp}" converter="localDateTimeConverter" />
+					</p:column>
+
+					<p:column id="commentColumn" headerText="Comentarios">
+						<h:outputText value="#{inc.commentary}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</h:form>
+	</p:panel>
+</ui:composition>

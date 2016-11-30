@@ -1,0 +1,187 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-lg-10">
+			<h2 class="col-lg-10">#{msg['menu.profile.absences']}</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="ibox">
+			<div class="ibox-content">
+				<h:form id="absencesForm">
+					<p:dataTable id="absencesTable" widgetVar="absencesTable" var="absence" binding="#{absencesController.datatable}"
+						value="#{absencesController.userAbsences}" rowKey="#{absence.id}"
+						rows="10" paginator="true" paginatorAlwaysVisible="false"
+						paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+						rowsPerPageTemplate="5,10,25,50,75"
+						rowsPerPageLabel="Número de ausencias por página: "
+						emptyMessage="#{msg['absences.empty']}"
+						lazy="true">						
+						<f:facet name="header">
+							#{msg['absences.actual']}
+						</f:facet>
+						
+						<p:column id="startDateColumn" headerText="#{msg['absences.startDate']}"
+							styleClass="col-md-2">
+							<h:outputText value="#{absence.startDate}" converter="localDateTimeConverter" />
+						</p:column>
+						<p:column id="endDateColumn" headerText="#{msg['absences.endDate']}"
+							styleClass="col-md-2">
+							<h:outputText value="#{absence.endDate}" converter="localDateTimeConverter" />
+						</p:column>
+						<p:column id="commentColumn" headerText="#{msg['absences.comment']}">
+							<h:outputText value="#{absence.commentary}" />
+						</p:column>
+						<p:column id="editColumn" styleClass="icon-column">
+							<p:commandButton title="Editar" update="absencesForm editAbsenceForm" process="@form" 
+								disabled="#{absence.startDate gt absencesController.currentTimestamp and absence.endDate lt absencesController.currentTimestamp}"
+								styleClass="table-button" icon="fa fa-edit"
+								actionListener="#{absencesController.setSelectedAbsence(absence)}" oncomplete="PF('editAbsenceDialog').show()" />
+						</p:column>
+						<p:column id="deleteColumn" styleClass="icon-column">
+							<p:commandButton title="Eliminar" update="absencesForm" process="@form"
+								disabled="#{absence.startDate gt absencesController.currentTimestamp and absence.endDate lt absencesController.currentTimestamp}"
+								styleClass="table-button" icon="fa fa-remove"
+								actionListener="#{absencesController.removeAbsence(absence)}" />
+						</p:column>						
+					</p:dataTable>
+					<div class="hr-line-dashed"></div>
+					<p:commandButton id="editBtn" value="#{msg['absences.new']}" type="button"
+							onclick="PF('newAbsenceDialog').show()"
+							styleClass="btn btn-primary col-xs-12 col-md-2 pull-right waves-effect waves-light" />
+					<div class="clearfix"></div>
+				</h:form>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-content">
+				<p:dataTable id="histAbsencesTable" widgetVar="histAbsencesTable" var="absence" binding="#{absencesController.histDatatable}"
+					value="#{absencesController.histAbsences}" rowKey="#{absence.id}"
+					rows="10" paginator="true" paginatorAlwaysVisible="false"
+					paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+					rowsPerPageTemplate="5,10,25,50,75"
+					rowsPerPageLabel="Número de ausencias por página: "
+					emptyMessage="#{msg['absences.empty']}"
+					lazy="true">						
+					<f:facet name="header">
+						#{msg['absences.historical']}
+					</f:facet>
+					
+					<p:column id="startDateColumn" headerText="#{msg['absences.startDate']}"
+						styleClass="col-md-2">
+						<h:outputText value="#{absence.startDate}" converter="localDateTimeConverter" />
+					</p:column>
+					<p:column id="endDateColumn" headerText="#{msg['absences.endDate']}"
+						styleClass="col-md-2">
+						<h:outputText value="#{absence.endDate}" converter="localDateTimeConverter" />
+					</p:column>
+					<p:column id="commentColumn" headerText="#{msg['absences.comment']}">
+						<h:outputText value="#{absence.commentary}" />
+					</p:column>					
+				</p:dataTable>
+			</div>
+		</div>
+	</p:panel>
+	<h:form id="newAbsenceForm" styleClass="form-horizontal form-label-left">
+		<p:dialog id="newAbsenceDialog" widgetVar="newAbsenceDialog" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade">
+			<f:facet name="header">
+				#{msg['absences.new']}
+			</f:facet>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="newAbsenceStartDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['absences.startDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="newAbsenceStartDate" value="#{absencesController.newAbsence.startDate}"
+								converter="localDateTimeConverter" locale="es" pattern="dd/MM/yyyy HH:mm"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="newAbsenceEndDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['absences.endDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="newAbsenceEndDate" value="#{absencesController.newAbsence.endDate}"
+								converter="localDateTimeConverter" locale="es" pattern="dd/MM/yyyy HH:mm"/>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newAbsenceComment" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['absences.comment']}" />
+							<div class="col-xs-12">
+								<p:inputTextarea id="newAbsenceComment" value="#{absencesController.newAbsence.commentary}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+			<f:facet name="footer">
+				<p:commandButton id="saveBtn" value="#{msg['absences.save']}"
+					action="#{absencesController.createAbsence()}" oncomplete="PF('newAbsenceDialog').hide()"
+					update="absencesForm newAbsenceForm"
+					styleClass="btn btn-primary col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<p:commandButton id="cancelNewAbsenceBtn" value="#{msg['absences.cancel']}" type="button"
+					onclick="PF('newAbsenceDialog').hide()"
+					styleClass="btn btn-primary bgm-gray col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<div class="clearfix"></div>
+			</f:facet>		
+		</p:dialog>
+	</h:form>
+	<h:form id="editAbsenceForm" styleClass="form-horizontal form-label-left">
+		<p:dialog id="editAbsenceDialog" widgetVar="editAbsenceDialog" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade">
+			<f:facet name="header">
+				#{msg['absences.edit']}
+			</f:facet>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="editAbsenceStartDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['absences.startDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="editAbsenceStartDate" value="#{absencesController.selectedAbsence.startDate}"
+								converter="localDateTimeConverter" locale="es" pattern="dd/MM/yyyy HH:mm"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="editAbsenceEndDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['absences.endDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="editAbsenceEndDate" value="#{absencesController.selectedAbsence.endDate}"
+								converter="localDateTimeConverter" locale="es" pattern="dd/MM/yyyy HH:mm"/>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editAbsenceComment" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['absences.comment']}" />
+							<div class="col-xs-12">
+								<p:inputTextarea id="editAbsenceComment" value="#{absencesController.selectedAbsence.commentary}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+			<f:facet name="footer">
+				<p:commandButton id="saveEditBtn" value="#{msg['absences.save']}"
+					action="#{absencesController.updateAbsence()}" oncomplete="PF('editAbsenceDialog').hide()"
+					update="absencesForm newAbsenceForm"
+					styleClass="btn btn-primary col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<p:commandButton id="cancelEditAbsenceBtn" value="#{msg['absences.cancel']}" type="button"
+					onclick="PF('editAbsenceDialog').hide()"
+					styleClass="btn btn-primary bgm-gray col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<div class="clearfix"></div>
+			</f:facet>		
+		</p:dialog>
+	</h:form>
+</ui:composition>

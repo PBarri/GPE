@@ -1,0 +1,56 @@
+spring:
+  profiles:
+    active: h2
+  mvc:
+    favicon:
+      enabled: false
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    properties:
+      hibernate.format_sql: false
+      hibernate.cglib.use_reflection_optimizer: true
+    hibernate:
+      ddl-auto: none
+server:
+  error:
+    whitelabel:
+      enabled: false
+gpe: 
+  welcomePage: '/views/dashboard.xhtml'
+  maxAttempts: 5
+endpoints:
+  actuator: 
+    enabled: true
+    sensitive: false
+  docs:
+    enabled: true
+    sensitive: false
+  health:
+    enabled: true
+  autoconfig:
+    enabled: true
+    sensitive: false
+  beans:
+    enabled: true
+    sensitive: false
+  configprops:
+    enabled: true
+    sensitive: false
+  dump:
+    enabled: true
+    sensitive: false
+  env:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true
+    sensitive: false
+  metrics:
+    enabled: true
+  mappings:
+    enabled: true
+    sensitive: false
+  trace:
+    enabled: true
+    sensitive: false

@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<nav class="navbar-default navbar-static-side">
+		<h:form id="menuGPE">
+			<div class="slimScrollDiv">
+				<div class="sidebar-collapse">
+					<ul class="nav metismenu" id="side-menu">
+						<li class="nav-header">
+							<div class="dropdown profile-element">
+								<span>
+									<p:graphicImage id="profile-image" alt="Profile" styleClass="img-responsive img-circle avatar"
+										rendered="#{not empty homeController.user.photoUrl}"
+										value="#{homeController.user.photoUrl}" />
+									<p:panel id="profile-avatar" rendered="#{empty homeController.user.photoUrl}" styleClass="img-circle avatar">
+										<h:outputText value="#{homeController.user.avatar}" />
+									</p:panel>
+								</span>
+								<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+									<span class="clear"> <span class="block m-t-xs">
+											<strong class="font-bold">#{homeController.user.name} #{homeController.user.surname}</strong>
+									</span> <span class="text-muted text-xs block">#{msg[homeController.user.role.description]} <b
+											class="caret"></b></span>
+								</span>
+								</a>
+								<ul class="dropdown-menu animated fadeInRight m-t-xs">
+									<li><p:commandLink
+											action="#{profileController.goToProfile()}"
+											update="layoutCenter" process="@form">
+											<i class="fa fa-cog"></i>
+											<span class="nav-label">#{msg['menu.profile.profile']}</span>
+										</p:commandLink></li>
+									<li><p:commandLink
+											action="#{timesheetController.goToTimesheets()}"
+											update="layoutCenter" process="@form">
+											<i class="fa fa-calendar-o"></i>
+											<span class="nav-label">#{msg['menu.profile.timesheet']}</span>
+										</p:commandLink></li>
+									<li><p:commandLink
+											action="#{absencesController.goToAbsences()}"
+											update="layoutCenter" process="@form">
+											<i class="fa fa-flag"></i>
+											<span class="nav-label">#{msg['menu.profile.absences']}</span>
+										</p:commandLink></li>
+									<li><p:commandLink
+											action="#{vacationsController.goToVacations()}"
+											update="layoutCenter" process="@form">
+											<i class="fa fa-plane"></i>
+											<span class="nav-label">#{msg['menu.profile.vacations']}</span>
+										</p:commandLink></li>
+
+									<li class="divider"></li>
+									<li><a href="/GPE/logout"><i class="fa fa-power-off"></i><span
+											class="nav-label"> #{msg['menu.profile.logout']}</span></a></li>
+								</ul>
+							</div>
+						</li>
+						<li><p:commandLink
+								action="#{dashboardController.goToDashboard()}"
+								update="layoutCenter" process="@form">
+								<i class="fa fa-dashboard"></i>
+								<span class="nav-label">#{msg['menu.dashboard']}</span>
+							</p:commandLink></li>
+						<li><a href="#"><i class="fa fa-briefcase"></i><span
+								class="nav-label">#{msg['menu.projects']}</span></a>
+							<ul class="nav nav-second-level" aria-expanded="false">
+								<li><p:commandLink
+										action="#{projectListController.goToProjectList()}"
+										update="layoutCenter" process="@form"
+										value="#{msg['menu.projects.projectList']}" /></li>
+								<li><p:commandLink
+										action="#{newProjectController.goToNewProject()}"
+										update="layoutCenter" process="@form" rendered="#{homeController.user.role.id le 2}"
+										value="#{msg['menu.projects.newProject']}" /></li>
+								<li><p:commandLink
+										action="#{requirementListController.goToRequirementList()}"
+										update="layoutCenter" process="@form"
+										value="#{msg['menu.projects.requirementList']}" /></li>
+							</ul></li>
+						<li><a href="#"><i class="fa fa-sitemap"></i><span
+								class="nav-label">#{msg['menu.tasks']}</span></a>
+							<ul class="nav nav-second-level" aria-expanded="false">
+								<li><p:commandLink
+										action="#{taskListController.goToTaskList()}"
+										update="layoutCenter" process="@form"
+										value="#{msg['menu.tasks.taskList']}" /></li>
+							</ul></li>
+						<li><a href="#"><i class="fa fa-users"></i><span
+								class="nav-label">#{msg['menu.users']}</span></a>
+							<ul class="nav nav-second-level" aria-expanded="false">
+								<li><p:commandLink
+										action="#{userListController.goToUserList()}"
+										update="layoutCenter" process="@form"
+										value="#{msg['menu.users.userList']}" /></li>
+								<li><p:commandLink
+										action="#{newUserController.goToNewUser()}"
+										update="layoutCenter" process="@form" rendered="#{homeController.user.role.id eq 1}"
+										value="#{msg['menu.users.newUser']}" /></li>
+							</ul></li>
+						<li><p:commandLink action="#{reportController.goToReports()}"
+								update="layoutCenter" process="@form">
+								<i class="fa fa-line-chart"></i>
+								<span class="nav-label">#{msg['menu.reports']}</span>
+							</p:commandLink>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</h:form>
+	</nav>
+</ui:composition>

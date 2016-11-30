@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading hidden-xs">
+		<div class="col-lg-10">
+			<h2 class="col-lg-10">#{msg['menu.profile.profile']}</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<h:form id="profileForm" styleClass="form-horizontal form-label-left">
+		<div class="ibox-profile">
+			<div id="profile-user" class="profile-wrapper">
+				<div class="profile-card card col-xs-12 col-md-4 col-lg-3">
+					<div class="card-up">
+						<p:graphicImage rendered="#{not empty profileController.user.photoUrl}" styleClass="img-responsive" 
+							value="#{profileController.user.photoUrl}" />
+						<p:panel rendered="#{empty profileController.user.photoUrl}" styleClass="profile-avatar">
+							<h:outputText value="#{profileController.user.avatar}" />
+						</p:panel>
+					</div>
+					<p:commandLink id="change-photo" styleClass="btn-floating btn-large waves-effect waves-light">
+						<i class="fa fa-camera"></i>
+					</p:commandLink>
+					<div class="card-content">
+						<h5><p:outputLabel value="#{profileController.user.name} #{profileController.user.surname}" /> </h5>
+						<div class="profile-contact">
+							<ul>
+								<li><i class="fa fa-user"></i><span class="nav-label">#{profileController.user.identifier}</span></li>
+								<li><i class="fa fa-at"></i><span class="nav-label">#{profileController.user.email}</span></li>
+								<li><i class="fa fa-phone"></i><span class="nav-label">#{profileController.user.phone}</span></li>
+								<li><i class="fa fa-map-marker"></i><span class="nav-label">#{profileController.user.city}, #{profileController.user.country}</span></li>
+							</ul>
+						</div>					
+					</div>
+					<div class="change-password-wrapper col-xs-12 hidden-xs">
+						<p:commandButton id="changePassword" value="Cambiar Contraseña"
+						styleClass="btn-primary col-xs-12 waves-effect" />
+					</div>						
+				</div>
+				<div class="profile-information col-xs-12 col-md-8 col-lg-9">
+					<p:tabView id="profile-tabs" scrollable="true">
+						<p:tab id="tab-about" title="#{msg['profile.tabs.about']}">
+							<div class="tab-section">
+								<div class="tab-section-title">
+									<h2><i class="fa fa-user"></i>#{msg['profile.tabs.about.info']}</h2>
+								</div>
+								<div class="tab-section-content">
+									<div class="row">
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userIdentifier" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.identifier']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userIdentifier" value="#{profileController.user.identifier}" disabled="true" />
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userName" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.name']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userName" value="#{profileController.user.name} #{profileController.user.surname}" disabled="true" />
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userBirthdate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.birthday']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:calendar id="userBirthdate" value="#{profileController.user.birthday}" disabled="true" 
+													converter="localDateConverter" locale="es" pattern="dd/MM/yyyy" />
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userLocation" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.city']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userLocation" value="#{profileController.user.city}, #{profileController.user.country}" disabled="true" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-section">
+								<div class="tab-section-title">
+									<h2><i class="fa fa-phone"></i>#{msg['profile.tabs.about.contact']}</h2>
+								</div>
+								<div class="tab-section-content">
+									<div class="row">
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userEmail" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.email']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userEmail" value="#{profileController.user.email}" disabled="true" />
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userPhone" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.phone']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userPhone" value="#{profileController.user.phone}" disabled="true" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-section">
+								<div class="tab-section-title">
+									<h2><i class="fa fa-group"></i>#{msg['profile.tabs.about.professional']}</h2>
+								</div>
+								<div class="tab-section-content">
+									<div class="row">
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userRole" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.role']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userRole" value="#{msg[profileController.user.role.description]}" disabled="true" />
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-md-6">
+											<p:outputLabel for="userPosition" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['profile.tabs.about.position']}" />
+											<div class="col-xs-12 col-md-8">
+												<p:inputText id="userPosition" value="#{msg[profileController.user.userPosition.description]}" disabled="true" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab id="tab-projects" title="#{msg['profile.tabs.projects']}">
+							<ui:repeat var="hist" value="#{profileController.user.historicalProjects}">
+								<div class="col-xs-12 col-md-4 minimal-card">
+									<div class="minimal-card-wrapper">
+										<p:panel styleClass="icon img-circle" rendered="#{empty hist.project.projectLogo}">
+											<h:outputText value="#{hist.project.projectTitle}" />
+										</p:panel>
+										<p:graphicImage styleClass="icon img-responsive img-circle" rendered="#{not empty hist.project.projectLogo}"
+											value="#{hist.project.projectLogo}" />
+										<div class="info">
+											<div class="name"><p:outputLabel value="#{hist.project.name}" /></div>
+											<div class="identifier"><p:outputLabel value="#{msg[hist.role.description]}" /></div>
+											<div class="category"><p:outputLabel value="#{hist.timestamp}" converter="localDateTimeConverter" /></div>
+										</div>
+									</div>
+								</div>
+							</ui:repeat>
+						</p:tab>
+						<p:tab id="tab-vacations" rendered="#{not homeController.user.isDeveloper()}" title="#{msg['profile.tabs.vacations']}">
+						
+						</p:tab>
+						<p:tab id="tab-absences" rendered="#{not homeController.user.isDeveloper()}" title="#{msg['profile.tabs.absences']}">
+						
+						</p:tab>
+					</p:tabView>
+				</div>
+				<div class="change-password-wrapper col-xs-12 hidden-sm hidden-md hidden-lg">
+					<p:commandButton id="changePasswordMobile" value="Cambiar Contraseña"
+					styleClass="btn-primary col-xs-12 waves-effect" />
+				</div>			
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		</h:form>
+	</p:panel>
+</ui:composition>

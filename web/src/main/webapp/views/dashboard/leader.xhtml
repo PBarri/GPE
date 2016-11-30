@@ -1,0 +1,262 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="leaderVacationsForm">
+		<p:panel styleClass="row" rendered="#{not empty dashboardController.leader.vacationsToApprove}">
+			<div class="col-xs-12">
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+						<i class="fa fa-warning"></i>Tienes vacaciones pendientes de aprobación
+					</div>
+					<div class="panel-body">
+						<p:dataTable id="vacationsDatatable" value="#{dashboardController.leader.vacationsToApprove}" var="vacation"
+							rowKey="#{vacation.id}" lazy="true"
+							rows="10" paginator="true" paginatorAlwaysVisible="false"
+							paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}">
+							
+							<p:column id="userColumn" headerText="Usuario">
+								<h:outputText value="#{vacation.user.name} #{vacation.user.surname}" />
+							</p:column>
+							<p:column id="startDateColumn" headerText="#{msg['vacations.startDate']}"
+								styleClass="col-md-2">
+								<h:outputText value="#{vacation.startDate}" converter="localDateConverter" />
+							</p:column>
+							<p:column id="endDateColumn" headerText="#{msg['vacations.endDate']}"
+								styleClass="col-md-2">
+								<h:outputText value="#{vacation.endDate}" converter="localDateConverter" />
+							</p:column>
+							<p:column id="yearColumn" headerText="#{msg['vacations.year']}"
+								styleClass="col-md-1">
+								<h:outputText value="#{vacation.year}" />
+							</p:column>
+							<p:column id="approveButton" styleClass="col-md-2" style="text-align: center;">
+								<p:commandButton update="leaderVacationsForm" process="@form" 
+									styleClass="btn-sm label label-success" value="Aprobar"
+									actionListener="#{dashboardController.approveVacation(vacation)}" />
+							</p:column>
+							<p:column id="rejectButton" styleClass="col-md-2" style="text-align: center;">
+								<p:commandButton update="leaderVacationsForm" process="@form"
+									styleClass="btn-sm label label-danger" value="Rechazar"
+									actionListener="#{dashboardController.rejectVacation(vacation)}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+	</h:form>
+	<h:form id="leaderDashboardForm">
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{userListController.goToUserList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Proyectos Asignados</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.projects}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{projectListController.goToProjectList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Requerimientos Activos</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.requirements}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink
+						action="#{requirementListController.goToRequirementList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Responsables a cargo</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.managers}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{taskListController.goToTaskList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Desarrolladores a cargo</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.developers}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{userListController.goToUserList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Activas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.activeTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{projectListController.goToProjectList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Retrasadas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.delayedTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink
+						action="#{requirementListController.goToRequirementList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Bloqueadas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.blockedTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{taskListController.goToTaskList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Paradas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.leader.dashboard.stoppedTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+		</div>
+		<p:panel styleClass="row" rendered="#{dashboardController.leader.dashboard.projects gt 0}">
+			<div class="col-xs-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>Proyectos</h5>
+						<div class="ibox-tools">
+							<a class="fullscreen-link"><i class="fa fa-expand" /></a>
+							<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<p:tabView styleClass="projectListTabs col-xs-12"
+							scrollable="true" var="project"
+							value="#{dashboardController.leader.user.projectList}">
+							<p:tab title="#{project.name}">
+								<p:accordionPanel multiple="true" styleClass="col-xs-12" value="#{project.requeriments}" var="req">
+									<p:tab title="#{req.name}">
+										<div class="row">
+											<h3>Diagrama Gantt</h3>
+											<div class="col-xs-12 gantt-chart scrollbar">
+												<div id="projectGantt_#{req.id}"></div>
+											</div>
+										</div>
+										<div class="row">
+											<h3>Estado Tareas</h3>
+											<div class="col-xs-12 col-md-6">
+												<div id="taskStatus_#{req.id}"></div>
+											</div>
+										</div>										
+									</p:tab>
+								</p:accordionPanel>
+							</p:tab>
+						</p:tabView>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+	</h:form>
+	<p:outputPanel autoUpdate="true">
+		<script type="text/javascript" src="js/dashboardCharts.js" />
+		<script type="text/javascript">
+			google.charts.setOnLoadCallback(drawDashboardCharts);			
+
+			function drawDashboardCharts() {
+				var charts = #{dashboardController.leader.projectTasksChartsData};
+				drawAllCharts(charts);
+			}
+
+			function drawTestChart() {
+				var otherData = new google.visualization.DataTable();
+				otherData.addColumn('string', 'Task ID');
+				otherData.addColumn('string', 'Task Name');
+				otherData.addColumn('string', 'Resource');
+				otherData.addColumn('date', 'Start');
+				otherData.addColumn('date', 'End');
+				otherData.addColumn('number', 'Duration');
+				otherData.addColumn('number', 'Percent Complete');
+				otherData.addColumn('string', 'Dependencies');
+
+				otherData.addRows([
+				  ['toTrain', 'Walk to train stop', 'walk', null, null, toMilliseconds(5), 100, null],
+				  ['music', 'Listen to music', 'music', null, null, toMilliseconds(70), 100, null],
+				  ['wait', 'Wait for train', 'wait', null, null, toMilliseconds(10), 100, 'toTrain'],
+				  ['train', 'Train ride', 'train', null, null, toMilliseconds(45), 75, 'wait'],
+				  ['toWork', 'Walk to work', 'walk', null, null, toMilliseconds(10), 0, 'train'],
+				  ['work', 'Sit down at desk', null, null, null, toMilliseconds(2), 0, 'toWork'],
+				
+				]);
+
+				var options = {
+					height: 275,
+			 		gantt: {
+				    	criticalPathEnabled: true,
+				    	criticalPathStyle: {
+				      		stroke: '#e64a19',
+				      		strokeWidth: 5
+				    	}
+				  	},
+				  	explorer: {axis: 'horizontal'}
+				};
+
+				var testGanttChart = new google.visualization.Gantt(document.getElementById('projectGantt_43'));
+
+				testGanttChart.draw(otherData, options);
+			}
+
+			$(window).resize(function() {
+			  	drawAllCharts(charts);
+			});
+		</script>
+	</p:outputPanel>
+</ui:composition>

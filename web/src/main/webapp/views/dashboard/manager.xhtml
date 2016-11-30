@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:gpe="http://gpe.org/ui">
+	
+	<h:form id="managerDashboardForm">
+		<div class="row">
+			<div class="col-xs-12 col-md-4">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{userListController.goToUserList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Proyectos Asignados</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.projects}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{projectListController.goToProjectList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Requerimientos Activos</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.requirements}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{taskListController.goToTaskList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Desarrolladores a cargo</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.developers}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{userListController.goToUserList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Activas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.activeTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{projectListController.goToProjectList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Retrasadas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.delayedTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink
+						action="#{requirementListController.goToRequirementList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Bloqueadas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.blockedTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{taskListController.goToTaskList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Paradas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText
+									value="#{dashboardController.manager.dashboard.stoppedTasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+		</div>
+		<p:panel styleClass="row" rendered="#{dashboardController.manager.dashboard.projects gt 0}">
+			<div class="col-xs-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<p:tabView styleClass="projectListTabs col-xs-12"
+							scrollable="true" var="project"
+							value="#{dashboardController.manager.user.projectsManaged}">
+							<p:tab title="#{project.name}">
+								<p:accordionPanel multiple="true" styleClass="col-xs-12" value="#{project.requeriments}" var="req">
+									<p:tab title="#{req.name}">
+										<div class="col-xs-12 col-md-6">
+											<div id="taskStatus_#{req.id}"></div>
+										</div>
+										<div class="col-xs-12 col-md-6">
+											<div id="projectGantt_#{req.id}"></div>
+										</div>
+										<div class="clearfix"></div>
+									</p:tab>
+								</p:accordionPanel>
+							</p:tab>
+						</p:tabView>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+	</h:form>
+	<p:outputPanel autoUpdate="true">
+		<script type="text/javascript" src="js/dashboardCharts.js" />
+		<script type="text/javascript">
+			google.charts.setOnLoadCallback(drawDashboardCharts);
+
+			function drawDashboardCharts() {
+				var charts = #{dashboardController.manager.projectTasksChartsData};
+				drawAllCharts(charts);
+			}			
+
+			$(window).resize(function() {
+			  	drawAllCharts(charts);
+			});
+		</script>
+	</p:outputPanel>
+</ui:composition>

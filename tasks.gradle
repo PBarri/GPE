@@ -1,0 +1,142 @@
+// Javadoc Task
+task gpeJavadoc(type: Javadoc, group: 'Documentation', description: 'Generates the javadoc for the project') {
+    destinationDir = file("${buildDir}/docs/javadoc")
+    options {
+		encoding = 'UTF-8'
+		docEncoding = 'UTF-8'
+		charSet = 'UTF-8'
+		linkSource = true
+	}
+	failOnError = false
+}
+
+task dist(type: Copy, group: 'Release', description: 'Creates the distribution folder with the files ready to deploy') {
+    dependsOn ':web:build'
+    destinationDir = file("dist")
+
+    from('web/build/libs') {
+        include '**/*.war'
+    }
+    from('batch/build/libs') {
+        include '**/*.war'
+    }
+
+    into 'dist'
+
+    includeEmptyDirs = false
+}
+
+// Docker tasks
+task dockerBuild(type: Exec, group: 'Docker', description: 'Generates a docker image') {
+	commandLine "docker", "build", "-t", "pbarri/gpe:$projectVersion", "."
+}
+
+task dockerRun(type: Exec, group: 'Docker', description: 'Run the docker image') {
+    commandLine "docker", "run", "--rm", "-p", "8080:8080", "pbarri/gpe:$projectVersion"
+}
+
+// Release tasks
+task majorRelease(group: 'Release', description: 'Generate a new major release ready to production') {
+    doFirst{
+        def newVersion = updateMajorVersion(true)
+        version = newVersion
+        println version
+    }
+}
+
+task minorRelease(group: 'Release', description: 'Generate a new minor release ready to production') {
+    doFirst{
+        def newVersion = updateMinorVersion(true)
+        version = newVersion
+        println version
+    }
+}
+
+task patchRelease(group: 'Release', description: 'Generate a new patch release ready to production') {
+    doFirst{
+        def newVersion = updatePatchVersion(true)
+        version = newVersion
+        println version
+    }
+}
+
+task majorSnapshot(group: 'Release', description: 'Generate a new major release for testing') {
+    doFirst{
+        def newVersion = updateMajorVersion(false)
+        version = newVersion
+        println version
+    }
+}
+
+task minorSnapshot(group: 'Release', description: 'Generate a new minor release for testing') {
+    doFirst{
+        def newVersion = updateMinorVersion(false)
+        version = newVersion
+        println version
+    }
+}
+
+task patchSnapshot(group: 'Release', description: 'Generate a new patch release for testing') {
+    doFirst{
+        def newVersion = updatePatchVersion(false)
+        version = newVersion
+        println version
+    }
+}
+
+// Aux functions
+
+def updateMajorVersion(Boolean release) {
+    def versionNumber = projectVersion.tokenize('.')
+    def major = versionNumber[0].toInteger()
+    def newVersion
+    if(!release) {
+        major += 1
+        newVersion = "$major.0.0" + ".SNAPSHOT"
+    } else {
+        newVersion = "$major.0.0" + ".RELEASE"
+    }
+    saveProperty("projectVersion", newVersion)
+    return newVersion
+}
+
+def updateMinorVersion(Boolean release) {
+    def versionNumber = projectVersion.tokenize('.')
+    def major = versionNumber[0]
+    def minor = versionNumber[1].toInteger()
+    def newVersion
+    if(!release) {
+        minor += 1
+        newVersion = "$major.$minor.0" + ".SNAPSHOT"
+    } else {
+        newVersion = "$major.$minor.0" + ".RELEASE"
+    }
+    saveProperty("projectVersion", newVersion)
+    return newVersion
+}
+
+def updatePatchVersion(Boolean release) {
+    def versionNumber = projectVersion.tokenize('.')
+    def major = versionNumber[0]
+    def minor = versionNumber[1]
+    def patch = versionNumber[2].toInteger()
+    def newVersion
+    if(!release) {
+        patch += 1
+        newVersion = "$major.$minor.$patch" + ".SNAPSHOT"
+    } else {
+        newVersion = "$major.$minor.$patch" + ".RELEASE"
+    }
+    saveProperty("projectVersion", newVersion)
+    return newVersion
+}
+
+def saveProperty(String property, String value) {
+    Properties props = new Properties()
+    File propertiesFile = file("gradle.properties")
+    propertiesFile.withInputStream {
+        props.load(it)
+    }
+    props.setProperty(property, value)
+    props.store(propertiesFile.newWriter(), null)
+}

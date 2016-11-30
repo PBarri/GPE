@@ -1,0 +1,156 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<h2 class="col-xs-11 col-lg-10">#{msg['menu.users.userList']}</h2>
+		<div class="col-xs-1 col-lg-2">
+			<a href="#" id="filterButton" class="navbar-minimalize minimalize-styl-2 btn btn-primary pull-right waves-effect waves-light"><i class="fa fa-filter"></i></a>
+		</div>
+		<div id="filterOverlay" class="filter-panel" style="display:none;">
+			<p:panel id="filterPanel">
+				<h:form id="userFilterForm">
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['users.list.filters.identifier']}"
+							for="identifierFilter" />
+						<div class="col-xs-8">
+							<p:inputText id="identifierFilter"
+								value="#{userListController.identifierFilter}" tabindex="1" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['users.list.filters.name']}" for="nameFilter" />
+						<div class="col-xs-8">
+							<p:inputText id="nameFilter"
+								value="#{userListController.nameFilter}" tabindex="2" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['users.list.filters.email']}" for="emailFilter" />
+						<div class="col-xs-8">
+							<p:inputText id="emailFilter"
+								value="#{userListController.emailFilter}" tabindex="3" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['users.list.filters.enabled']}" for="enabledFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="enabledFilter"
+								value="#{userListController.enabledFilter}" tabindex="4"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['users.list.filters.enabled.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItem itemValue="true"
+									itemLabel="#{msg['users.list.filters.enabled.enabled']}" />
+								<f:selectItem itemValue="false"
+									itemLabel="#{msg['users.list.filters.enabled.disabled']}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['users.list.filters.role']}" for="roleFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="roleFilter"
+								value="#{userListController.roleFilter}" tabindex="5"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['users.list.filters.role.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{userListController.roles}" var="role"
+									itemValue="#{role}" itemLabel="#{msg[role.description]}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['users.list.filters.userPosition']}"
+							for="userPositionFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="userPositionFilter"
+								value="#{userListController.userPositionFilter}" tabindex="6"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['users.list.filters.userPosition.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{userListController.userPositions}"
+									var="position" itemValue="#{position}"
+									itemLabel="#{msg[position.description]}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<p:commandButton id="filterUsers" value="#{msg['search']}"
+						styleClass="btn btn-sm btn-primary pull-right waves-effect waves-light"
+						action="#{userListController.search()}"
+						update="userListForm:userTable"
+						oncomplete="$('#filterOverlay').puioverlaypanel('hide')" />
+					<div class="clearfix"></div>
+				</h:form>
+			</p:panel>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="ibox">
+			<div class="ibox-content">
+				<h:form id="userListForm">
+					<p:dataTable id="userTable" widgetVar="userTable" var="user" binding="#{userListController.datatable}"
+						value="#{userListController.userList}" rowKey="#{user.identifier}"
+						rows="10" paginator="true" paginatorAlwaysVisible="true"
+						paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+						rowsPerPageTemplate="5,10,25,50,75"
+						rowsPerPageLabel="Número de usuarios por página: "
+						emptyMessage="#{msg['users.list.emptyMsg']}"
+						lazy="true">
+
+						<p:column id="idColumn" headerText="ID">
+							<h:outputText value="#{user.identifier}" />
+						</p:column>
+
+						<p:column id="nameColumn" headerText="Nombre">
+							<h:outputText value="#{user.name} #{user.surname}" />
+						</p:column>
+
+						<p:column id="emailColumn" headerText="Email">
+							<h:outputText value="#{user.email}" />
+						</p:column>
+
+						<p:column id="phoneColumn" headerText="Teléfono">
+							<h:outputText value="#{user.phone}" />
+						</p:column>
+
+						<p:column id="roleColumn" headerText="Rol">
+							<h:outputText value="#{msg[user.role.description]}" />
+						</p:column>
+
+						<p:column id="categoryColumn" headerText="Categoría">
+							<h:outputText value="#{msg[user.userPosition.description]}" />
+						</p:column>
+						
+						<p:column id="profileColumn" styleClass="icon-column">
+							<p:commandButton title="Perfil" update="layoutCenter" process="@form"
+								styleClass="table-button" icon="fa fa-user"
+								actionListener="#{profileController.goToProfile(user)}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</p:panel>
+	
+	<script type="text/javascript">
+		$(function() {
+			$("#filterOverlay").puioverlaypanel({
+				target: '#filterButton',
+				appendTo: '#main-title'				
+			});
+		});
+	</script>
+</ui:composition>

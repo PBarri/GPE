@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="adminDashboardForm">
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{userListController.goToUserList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Usuarios</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText value="#{dashboardController.admin.users}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{projectListController.goToProjectList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Proyectos Activos</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText value="#{dashboardController.admin.projects}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink
+						action="#{requirementListController.goToRequirementList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Requerimientos Activos</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText value="#{dashboardController.admin.requirements}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="ibox float-e-margins">
+					<p:commandLink action="#{taskListController.goToTaskList()}"
+						update="layoutCenter">
+						<div class="ibox-title">Tareas Activas</div>
+						<div class="ibox-content">
+							<h1 class="no-margins">
+								<h:outputText value="#{dashboardController.admin.tasks}" />
+							</h1>
+						</div>
+					</p:commandLink>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>Estado Tareas</h5>
+					</div>
+					<div id="taskTypeChart" class="ibox-content"></div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>Últimos Informes</h5>
+					</div>
+					<div class="ibox-content">
+						<p:dataTable id="reportsDatatable"
+							value="#{dashboardController.admin.lastReports}" var="report"
+							rows="4">
+
+							<p:column id="typeColumn" styleClass="hidden-xs"
+								headerText="#{msg['reports.list.type']}">
+								<h:outputText value="#{msg[report.type.description]}" />
+							</p:column>
+
+							<p:column id="dateColumn" styleClass="hidden-xs"
+								headerText="#{msg['reports.list.date']}">
+								<h:outputText value="#{report.timestamp}"
+									converter="localDateTimeConverter" />
+							</p:column>
+
+							<p:column id="statusColumn" styleClass="hidden-xs"
+								headerText="#{msg['reports.list.status']}">
+								<h:outputText value="#{msg[report.status.description]}" />
+							</p:column>
+							
+							<p:column id="downloadColumn" styleClass="icon-column">
+								<p:commandButton title="Descargar" styleClass="table-button" icon="fa fa-download"
+									action="#{dashboardController.downloadReport(report)}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h:form>
+	<script type="text/javascript">
+		google.charts.setOnLoadCallback(drawChart);
+
+		var metrica3Tasks = #{dashboardController.admin.metrica3Tasks};
+
+		var metrica3Colors = metrica3Tasks.pop();
+		
+		function drawChart() {
+
+		   	var metrica3Data = new google.visualization.DataTable();
+		   	metrica3Data.addColumn('string', 'Element');
+		   	metrica3Data.addColumn('number', 'Percentage');
+		   	metrica3Data.addRows(metrica3Tasks);
+
+		   	var options = {
+				chartArea: {
+					top:'5%', width:'100%', height:'95%'
+				},
+				legend: {
+					position: 'right',
+					textStyle: {
+						fontName: ["Roboto"],
+						fontSize: '13',
+						color: '#676a6c'
+					}
+				},
+				sliceVisibilityThreshold: 0
+			};
+
+			var optionsMetrica3 = options;
+
+			optionsMetrica3["colors"] = metrica3Colors;
+			
+			var emptyMsg = "#{msg['tasks.list.emptyMsg']}";
+			if (metrica3Data.getFilteredRows([{column: 1, minValue: 1}]).length == 0) {
+				$('#taskTypeChart').append(emptyMsg)
+			} else {
+				var chartMetrica3 = new google.visualization.PieChart(document.getElementById('taskTypeChart'));
+				chartMetrica3.draw(metrica3Data, optionsMetrica3);
+			}			
+		}
+
+		$(window).resize(function() {
+			drawChart();
+		});
+	</script>
+</ui:composition>

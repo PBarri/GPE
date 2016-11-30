@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:form id="asignUserDialogForm">
+	<p:dialog id="asignUserDialog" header="Asignar usuarios" widgetVar="asignUserDialog"
+		resizable="false" closeOnEscape="true" closable="true"
+		showEffect="fade" hideEffect="drop" width="50%" height="80%">
+		<p:ajax event="close" update="asignUserDialog" global="false" />
+		<p:pickList id="asignUserPickList" value="#{taskDetailsController.picklist}" var="user" effect="fade"
+			itemValue="#{user}" itemLabel="#{user.identifier},#{user.name},#{user.surname},#{msg[user.role.description]}" showSourceControls="false" showTargetControls="false" showCheckbox="false" responsive="true"
+			showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="pickListAsignUsersConverter" global="false">
+ 			
+			<f:facet name="sourceCaption">Usuarios Disponibles</f:facet>
+			<f:facet name="targetCaption">Usuarios Asignados</f:facet>
+			<p:column>
+				<div class="minimal-card">
+			        <div class="minimal-card-wrapper">
+			        	<p:panel styleClass="icon img-circle" rendered="#{empty user.photoUrl}">
+							<h:outputText value="#{user.avatar}" />
+						</p:panel>
+						<p:graphicImage styleClass="icon img-responsive img-circle" rendered="#{not empty user.photoUrl}"
+							value="#{user.photoUrl}" />
+						<div class="info">
+							<div class="name"><p:outputLabel value="#{user.name}" /></div>
+							<div class="identifier"><p:outputLabel value="#{user.identifier}" /></div>
+							<div class="category"><p:outputLabel value="#{msg[user.role.description]}" /></div>
+						</div>
+			        </div>
+		        </div>
+			</p:column>
+	    </p:pickList>
+		<f:facet name="footer">
+			<p:commandButton id="assignUserCancelButton" type="button" value="Cancelar" styleClass="btn-default waves-effect waves-light" onclick="PF('asignUserDialog').hide();" />
+			<p:commandButton id="assignUserSaveButton" value="Guardar" styleClass="btn-primary waves-effect waves-light" update="asignUserDialog taskDetailsForm"
+				actionListener="#{taskDetailsController.assignUser}" oncomplete="PF('asignUserDialog').hide();" />
+		</f:facet> 
+	</p:dialog>
+	</h:form>
+	
+	<script type="text/javascript">
+	//<![CDATA[
+		function filterFunction(itemLabel, filterValue) {
+			var labels = itemLabel.split(",");
+			for(var i = 0; i < labels.length; i++) {
+				if(labels[i].toLowerCase().indexOf(filterValue) >= 0) return true;		
+			}
+			return false;
+		}
+	//]]>
+ 	</script>
+</ui:composition>

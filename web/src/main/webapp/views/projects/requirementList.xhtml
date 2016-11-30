@@ -1,0 +1,169 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-lg-10">
+			<h2 class="col-lg-10">#{msg['menu.projects.requirementList']}</h2>
+		</div>
+		<div class="col-xs-1 col-lg-2">
+			<a href="#" id="filterButton" class="navbar-minimalize minimalize-styl-2 btn btn-primary pull-right"><i class="fa fa-filter"></i></a>
+		</div>
+		<div id="filterOverlay" class="filter-panel" style="display:none;">
+			<p:panel id="filterPanel">
+				<h:form id="requirementFilterForm">
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['requirement.list.filters.code']}"
+							for="codeFilter" />
+						<div class="col-xs-8">
+							<p:inputText id="codeFilter"
+								value="#{requirementListController.codeFilter}" tabindex="1" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['requirement.list.filters.name']}" for="nameFilter" />
+						<div class="col-xs-8">
+							<p:inputText id="nameFilter"
+								value="#{requirementListController.nameFilter}" tabindex="2" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['requirement.list.filters.project']}" for="projectFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="projectFilter"
+								value="#{requirementListController.projectFilter}" tabindex="3"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['requirement.list.filters.project.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{requirementListController.userProjects}" var="project"
+									itemValue="#{project}" itemLabel="#{project.name}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['requirement.list.filters.archived']}" for="archivedFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="archivedFilter"
+								value="#{requirementListController.archivedFilter}" tabindex="4"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['requirement.list.filters.archived.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItem itemValue="true"
+									itemLabel="#{msg['requirement.list.filters.archived.active']}" />
+								<f:selectItem itemValue="false"
+									itemLabel="#{msg['requirement.list.filters.archived.archived']}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['requirement.list.filters.startDate']}" for="startDateFilter" />
+						<div class="col-xs-8">
+							<p:calendar id="startDateFilter" locale="es" pattern="dd/MM/yyyy" tabindex="5"
+								converter="localDateConverter"
+								value="#{requirementListController.startDateFilter}" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['requirement.list.filters.endDate']}" for="endDateFilter" />
+						<div class="col-xs-8">
+							<p:calendar id="endDateFilter" locale="es" pattern="dd/MM/yyyy" tabindex="6"
+								converter="localDateConverter"
+								value="#{requirementListController.endDateFilter}" />
+						</div>
+					</div>
+					<p:commandButton id="filterUsers" value="#{msg['search']}"
+						styleClass="btn btn-sm btn-primary pull-right waves-effect waves-light"
+						action="#{requirementListController.search()}"
+						update="requirementListForm:requirementTable"
+						oncomplete="$('#filterOverlay').puioverlaypanel('hide')" />
+					<div class="clearfix"></div>
+				</h:form>
+			</p:panel>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="ibox">
+			<div class="ibox-content">
+				<h:form id="requirementListForm">
+					<p:dataTable id="requirementTable" widgetVar="requirementTable"
+						var="req" value="#{requirementListController.requirementList}"
+						rowKey="#{req.id}" rows="10" paginator="true"
+						paginatorAlwaysVisible="true"
+						paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+						rowsPerPageTemplate="5,10,25,50,75"
+						rowsPerPageLabel="Número de usuarios por página: "
+						emptyMessage="#{msg['requirement.list.emptyMsg']}"
+						selectionMode="single" lazy="true">
+
+						<p:column id="codeColumn"
+							headerText="#{msg['requirement.list.code']}">
+							<h:outputText value="#{req.requirementCode}" />
+						</p:column>
+
+						<p:column id="nameColumn"
+							headerText="#{msg['requirement.list.name']}">
+							<h:outputText value="#{req.name}" />
+						</p:column>
+
+						<p:column id="projectColumn"
+							headerText="#{msg['requirement.list.project']}">
+							<h:outputText value="#{req.project.name}" />
+						</p:column>
+
+						<p:column id="percentageColumn"
+							headerText="#{msg['requirement.list.percentage']}">
+							<h:outputText value="#{req.hours}" />
+						</p:column>
+
+						<p:column id="incurredHoursColumn"
+							headerText="#{msg['requirement.list.incurredHours']}">
+							<h:outputText value="#{req.hours}" />
+						</p:column>
+
+						<p:column id="hoursColumn"
+							headerText="#{msg['requirement.list.hours']}">
+							<h:outputText value="#{req.hours}" />
+						</p:column>
+
+						<p:column id="startDateColumn"
+							headerText="#{msg['requirement.list.startDate']}">
+							<h:outputText value="#{req.startDate}" converter="localDateConverter" />
+						</p:column>
+
+						<p:column id="endDateColumn"
+							headerText="#{msg['requirement.list.endDate']}">
+							<h:outputText value="#{req.endDate}" converter="localDateConverter" />
+						</p:column>
+						
+						<p:column id="detailsColumn" styleClass="icon-column">
+							<p:commandButton title="Detalles" update="layoutCenter" process="@form"
+								styleClass="table-button" icon="fa fa-spinner" rendered="#{req.project.methodology.id eq 1}"
+								actionListener="#{requirementDetailsController.goToRequirementDetails(req)}" />
+							<p:commandButton title="Detalles" update="layoutCenter" process="@form"
+								styleClass="table-button" icon="fa fa-tag" rendered="#{req.project.methodology.id eq 2}"
+								actionListener="#{requirementDetailsController.goToRequirementDetails(req)}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</p:panel>
+	<script type="text/javascript">
+		$(function() {
+			$("#filterOverlay").puioverlaypanel({
+				target: '#filterButton',
+				appendTo: '#main-title'				
+			});
+		});
+	</script>
+</ui:composition>

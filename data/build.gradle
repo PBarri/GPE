@@ -1,0 +1,65 @@
+description = 'GPE data module'
+
+jar {
+	baseName = "${rootProject.name}-data"
+	version = projectVersion
+}
+
+sourceSets {
+	generated {
+		java {
+			srcDirs = ['src/main/generated']
+		}
+	}
+}
+
+configurations {
+	querydsl
+}
+
+dependencies {
+	compile project(':utils')
+    compile 'org.springframework.boot:spring-boot-starter-aop'
+    compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
+		exclude group: 'org.apache.tomcat'
+		exclude group: 'com.querydsl'
+	}
+	compile 'com.google.code.gson:gson:2.7'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+	compile ':ojdbc:6'
+	compile "com.querydsl:querydsl-jpa:${querydslVersion}"
+	compile 'javax.interceptor:javax.interceptor-api:1.2'
+	querydsl "com.querydsl:querydsl-apt:${querydslVersion}:jpa"
+	querydsl "com.querydsl:querydsl-sql:${querydslVersion}"
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+		exclude module: 'commons-logging'
+    }
+
+	compile 'com.h2database:h2'
+}
+
+task generateQueryDsl (type: JavaCompile, group: build, description: 'Generate QueryDsl Q classes') {
+	source = sourceSets.main.java
+	classpath = configurations.compileClasspath + configurations.querydsl
+	options.compilerArgs = ["-proc:only", "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"]
+	destinationDir = sourceSets.generated.java.srcDirs.iterator().next()	
+}
+
+compileJava {
+	dependsOn generateQueryDsl
+	source generateQueryDsl.destinationDir
+}
+
+compileGeneratedJava {
+	dependsOn generateQueryDsl
+	options.warnings = false
+	classpath +=sourceSets.main.runtimeClasspath
+}
+
+clean {
+	delete sourceSets.generated.java.srcDirs
+}
+
+bootRepackage {
+	enabled = false	
+}

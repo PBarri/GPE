@@ -1,0 +1,10 @@
+rootProject.name = 'gpe'
+include ':web'
+include ':data'
+include ':batch'
+include ':utils'
+
+project(':web').projectDir = "$rootDir/web" as File
+project(':data').projectDir = "$rootDir/data" as File
+project(':batch').projectDir = "$rootDir/batch" as File
+project(':utils').projectDir = "$rootDir/utils" as File

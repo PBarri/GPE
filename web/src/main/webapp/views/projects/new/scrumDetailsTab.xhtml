@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.scrum.leader']}"
+					for="projectProductOwner" />
+				<div class="col-xs-8">
+					<p:selectOneMenu id="projectProductOwner"
+						value="#{newProjectController.leader}" tabindex="6"
+						styleClass="form-control" converter="baseEntityConverter">
+						<f:selectItem
+							itemLabel="#{msg['projects.list.filters.projectLeader.noSelectOption']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{newProjectController.projectLeaders}"
+							var="leader" itemValue="#{leader}"
+							itemLabel="#{leader.name} #{leader.surname}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label" for="scrumMasterFilter"
+					value="#{msg['projects.new.wizard.scrum.manager']}" />
+				<div class="col-xs-8">
+					<p:selectOneMenu id="scrumMasterFilter"
+						value="#{newProjectController.scrumMaster}" tabindex="7"
+						converter="baseEntityConverter" styleClass="form-control">
+						<f:selectItem
+							itemLabel="#{msg['projects.list.filters.projectManager.noSelectOption']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{newProjectController.projectManagers}"
+							var="manager" itemValue="#{manager}"
+							itemLabel="#{manager.name} #{manager.surname}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label" for="scrumProjectDevelopersFilter"
+					value="#{msg['projects.new.wizard.metrica.developers']}" />
+				<div class="col-xs-8">
+					<p:selectCheckboxMenu id="scrumProjectDevelopersFilter"
+						label="Desarrolladores" value="#{newProjectController.developers}"
+						tabindex="8" converter="baseEntityConverter"
+						styleClass="form-control" filter="true" filterMatchMode="contains">
+						<f:selectItems value="#{newProjectController.projectDevelopers}"
+							var="dev" itemValue="#{dev}"
+							itemLabel="#{dev.name} #{dev.surname}" />
+					</p:selectCheckboxMenu>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.iterationCode']}"
+					for="iterationCode" />
+				<div class="col-xs-8">
+					<p:inputText id="iterationCode"
+						value="#{newProjectController.newRequirement.requirementCode}"
+						tabindex="9" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.iteration.name']}"
+					for="iterationName" />
+				<div class="col-xs-8">
+					<p:inputText id="iterationName"
+						value="#{newProjectController.newRequirement.name}" tabindex="10" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.iteration.period']}"
+					for="iterationPeriod" />
+				<div class="col-xs-8">
+					<p:selectOneMenu id="iterationPeriod"
+						value="#{newProjectController.newSprintPeriod}" tabindex="7"
+						styleClass="form-control">
+						<f:selectItem
+							itemLabel="#{msg['projects.new.wizard.iteration.period.noSelectOption']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{newProjectController.sprintDurations}"
+							var="period" itemValue="#{period}"
+							itemLabel="#{msg[period.code]}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.iteration.cvsCode']}"
+					for="iterationCvsCode" />
+				<div class="col-xs-8">
+					<p:inputText id="iterationCvsCode"
+						value="#{newProjectController.newRequirement.cvsCode}"
+						tabindex="12" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.iteration.startDate']}" for="itStartDate" />
+				<div class="col-xs-8">
+					<p:calendar id="itStartDate" locale="es" pattern="dd/MM/yyyy"
+						converter="localDateConverter"
+						value="#{newProjectController.newRequirement.startDate}"
+						tabindex="13" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</ui:composition>

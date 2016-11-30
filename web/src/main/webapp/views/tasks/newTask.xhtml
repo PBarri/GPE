@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:form id="newTaskDialogForm" styleClass="form-horizontal">
+		<p:dialog id="newTaskDialog" header="Nueva Tarea" widgetVar="newTaskDialog"
+			resizable="false" closeOnEscape="true" closable="true" appendTo="@(body)"
+			showEffect="fade" hideEffect="drop" width="50%" height="80%">
+			<p:ajax event="close" update="newTaskDialog" global="false" />
+			
+			<div class="row">
+			<div class="form-group col-xs-12 col-md-6">
+				<p:outputLabel value="Código" for="taskCode"
+					styleClass="control-label col-md-4" />
+				<div class="col-md-8">
+					<p:inputText id="taskCode"
+						value="#{taskDetailsController.newTask.code}" tabindex="1" />
+				</div>
+			</div>
+			
+			<div class="form-group col-xs-12 col-md-6">
+				<p:outputLabel value="Nombre" for="taskName"
+					styleClass="control-label col-md-4" />
+				<div class="col-md-8">
+					<p:inputText id="taskName"
+						value="#{taskDetailsController.newTask.name}" tabindex="2" />
+				</div>
+			</div>
+			</div>
+			<div class="row">
+			<div class="form-group col-xs-12 col-md-6">
+				<p:outputLabel value="Fecha Inicio" for="taskStartDate"
+					styleClass="control-label col-md-4" />
+				<div class="col-md-8">
+					<p:calendar id="taskStartDate" locale="es" pattern="dd/MM/yyyy"
+						converter="localDateConverter"
+						value="#{taskDetailsController.newTask.startDate}"
+						tabindex="3" />
+				</div>
+			</div>
+			
+			<div class="form-group col-xs-12 col-md-6">
+				<p:outputLabel value="Fecha Fin" for="taskEndDate"
+					styleClass="control-label col-md-4" />
+				<div class="col-md-8">
+					<p:calendar id="taskEndDate" locale="es" pattern="dd/MM/yyyy"
+						converter="localDateConverter"
+						value="#{taskDetailsController.newTask.endDate}"
+						tabindex="4" />
+				</div>
+			</div>
+			</div>
+			<div class="row">
+			<div class="form-group col-xs-12 col-md-6">
+				<p:outputLabel value="Horas" for="taskHours"
+					styleClass="control-label col-md-4" />
+				<div class="col-md-8">
+					<p:inputText id="taskHours" type="number"
+						value="#{taskDetailsController.newTask.hours}" tabindex="5" />
+				</div>
+			</div>
+			
+			<div class="form-group col-xs-12 col-md-6">
+				<p:outputLabel value="Prioridad" for="taskPriority"
+					styleClass="control-label col-md-4" />
+				<div class="col-md-8">
+					<p:selectOneMenu id="taskPriority" appendTo="@this"
+						value="#{taskDetailsController.newTaskPriority}"
+						styleClass="form-control" tabindex="6">
+						<f:selectItem itemLabel="Seleccione una" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{taskDetailsController.taskPriorities}" var="priority"
+							itemValue="#{priority}" itemLabel="#{msg[priority.description]}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+			</div>
+			<div class="row">
+			<div class="form-group col-xs-12">
+				<p:outputLabel value="Descripción" for="taskDescription"
+					styleClass="control-label col-xs-12 pull-left" />
+				<div class="col-xs-12">
+					<p:inputTextarea id="taskDescription" value="#{taskDetailsController.newTask.description}" tabindex="7" />
+				</div>
+			</div>
+			</div>
+			<f:facet name="footer">
+				<p:commandButton id="newTaskCancelButton" type="button" value="Cancelar" styleClass="btn-default waves-effect waves-light" onclick="PF('newTaskDialog').hide();" />
+				<p:commandButton id="newTaskSaveButton" value="Guardar" styleClass="btn-primary waves-effect waves-light" update="newTaskDialog taskDetailsForm"
+					actionListener="#{taskDetailsController.createTask}" oncomplete="PF('newTaskDialog').hide();" />
+			</f:facet>
+		</p:dialog>
+	</h:form>
+
+</ui:composition>

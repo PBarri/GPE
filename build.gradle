@@ -1,0 +1,90 @@
+buildscript {
+    ext {
+      springBootVersion = '1.4.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+    }
+}
+
+allprojects  {
+    apply plugin: 'maven'
+
+    group = 'com.pbarri.gpe'
+    version = projectVersion
+}
+
+subprojects {
+    // Plugins to apply to all subprojects
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse-wtp'
+
+    // Java version
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+
+  
+    repositories {    
+        // Primefaces repository
+        maven { url "http://repository.primefaces.org" }
+        // Add lib folder to repository
+        flatDir {
+            dirs "${rootDir}/lib"
+        }
+        mavenCentral()
+        mavenLocal()
+    }
+  
+    javadoc {
+        options {
+		    encoding = 'UTF-8'
+		    docEncoding = 'UTF-8'
+		    charSet = 'UTF-8'
+		    linkSource = true
+	    }
+	    failOnError = false
+    }
+  
+    // Collect all javadoc inside the same folder
+    afterEvaluate {
+		if(plugins.hasPlugin(JavaPlugin)) {			
+			// configuration here
+			rootProject.tasks.gpeJavadoc {
+				source += files(sourceSets.collect { srcSet -> srcSet.allJava })
+				classpath += files(sourceSets*.compileClasspath)
+			}
+
+		}
+	}
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    eclipse {
+        classpath {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+}
+
+clean {
+    doFirst {
+        delete 'dist'
+    }
+}
+
+task wrapper(type: Wrapper, group: 'Gradle', description: 'Generates the gradle wrapper') {
+    gradleVersion = '3.2'
+}
+
+apply from: 'tasks.gradle'

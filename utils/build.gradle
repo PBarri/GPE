@@ -1,0 +1,8 @@
+jar {
+	baseName = "${rootProject.name}-utils"
+	version = projectVersion
+}
+
+bootRepackage {
+	enabled = false
+}

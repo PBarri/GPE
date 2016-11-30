@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-xs-11 col-lg-10">
+			<h2 class="col-xs-11 col-lg-10">#{msg['menu.reports']}</h2>
+		</div>
+		<div class="col-xs-1 col-lg-2">
+			<a href="#" id="filterButton" class="navbar-minimalize minimalize-styl-2 btn btn-primary pull-right"><i class="fa fa-filter"></i></a>
+		</div>
+		<div id="filterOverlay" class="filter-panel" style="display:none;">
+			<p:panel id="filterPanel">
+				<h:form id="reportFilterForm" styleClass="form-horizontal label-left">
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['reports.list.filters.type']}" for="typeFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="typeFilter"
+								value="#{reportController.reportTypeFilter}" tabindex="1"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['reports.list.filters.type.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{reportController.reportTypes}" var="type"
+									itemValue="#{type}" itemLabel="#{msg[type.description]}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['reports.list.filters.status']}" for="statusFilter" />
+						<div class="col-xs-8">
+							<p:selectOneMenu id="statusFilter"
+								value="#{reportController.reportStatusFilter}" tabindex="2"
+								styleClass="form-control">
+								<f:selectItem
+									itemLabel="#{msg['reports.list.filters.status.noSelectOption']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{reportController.reportStatus}" var="status"
+									itemValue="#{status}" itemLabel="#{msg[status.description]}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['reports.list.filters.user']}" for="userFilter" />
+						<div class="col-xs-8">
+							<p:inputText id="userFilter"
+								value="#{reportController.userFilter}" tabindex="3" />
+						</div>
+					</div>
+					<div class="form-group col-xs-12 col-md-6">
+						<p:outputLabel styleClass="col-xs-4"
+							value="#{msg['reports.list.filters.date']}" for="dateFilter" />
+						<div class="col-xs-8">
+							<p:calendar id="dateFilter" locale="es" pattern="dd/MM/yyyy"
+								converter="localDateConverter"
+								value="#{reportController.dateFilter}" />
+						</div>
+					</div>
+					<p:commandButton id="filterReports" value="#{msg['search']}"
+						styleClass="btn btn-sm btn-primary pull-right"
+						action="#{reportController.search()}"
+						update="reportListForm:reportTable"
+						oncomplete="$('#filterOverlay').puioverlaypanel('hide')" />
+					<div class="clearfix"></div>
+				</h:form>
+			</p:panel>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="row">
+			<h:form id="generateReportForm">
+				<div class="col-xs-6 col-md-3 img-button-container">
+					<p:commandButton styleClass="report-button report-project" value="Informe de&#10;Situación"
+						action="#{reportController.generateProjectReport}" update="reportListForm">
+					
+					</p:commandButton>
+				</div>
+				<div class="col-xs-6 col-md-3 img-button-container">
+					<p:commandButton styleClass="report-button report-incurred" value="Informe de&#10;Incurridos"
+						action="#{reportController.generateIncurredReport}" update="reportListForm">
+					
+					</p:commandButton>
+				</div>
+				<div class="col-xs-6 col-md-3 img-button-container">
+					<p:commandButton styleClass="report-button report-user" value="Informe de&#10;Usuarios"
+						action="#{reportController.generateUserReport}" update="reportListForm">
+					
+					</p:commandButton>
+				</div>
+				<div class="col-xs-6 col-md-3 img-button-container">
+					<p:commandButton styleClass="report-button report-server" value="Informe de&#10;Servidores"
+						action="#{reportController.generateServerReport}" update="reportListForm">
+					
+					</p:commandButton>
+				</div>
+			</h:form>	
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+			<div class="ibox">
+				<div class="ibox-content">
+					<h:form id="reportListForm">
+						<p:dataTable id="reportTable" widgetVar="reportTable" var="report"
+							value="#{reportController.reportList}" rowKey="#{report.id}"
+							rows="10" paginator="true" paginatorAlwaysVisible="true"
+							paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+							rowsPerPageTemplate="5,10,25,50,75"
+							rowsPerPageLabel="#{msg['reports.list.numberRows']}"
+							emptyMessage="#{msg['reports.list.emptyMsg']}"
+							selectionMode="single" lazy="true">
+	
+							<p:column id="nameColumn" styleClass="col-xs-12 col-sm-3" headerText="#{msg['reports.list.name']}">
+								<h:outputText value="#{report.name}" />
+							</p:column>
+	
+							<p:column id="typeColumn" styleClass="hidden-xs" headerText="#{msg['reports.list.type']}">
+								<h:outputText value="#{msg[report.type.description]}" />
+							</p:column>
+	
+							<p:column id="dateColumn" styleClass="hidden-xs" headerText="#{msg['reports.list.date']}">
+								<h:outputText value="#{report.timestamp}" converter="localDateTimeConverter" />
+							</p:column>
+	
+							<p:column id="userColumn" styleClass="hidden-xs" headerText="#{msg['reports.list.user']}">
+								<h:outputText value="#{report.user.identifier}" />
+							</p:column>
+	
+							<p:column id="statusColumn" styleClass="hidden-xs" headerText="#{msg['reports.list.status']}">
+								<h:outputText value="#{msg[report.status.description]}" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</div>
+			</div>
+			</div>
+		</div>
+	</p:panel>
+	<script type="text/javascript">
+		$(function() {
+			$("#filterOverlay").puioverlaypanel({
+				target: '#filterButton',
+				appendTo: '#main-title'				
+			});
+		});
+	</script>
+</ui:composition>

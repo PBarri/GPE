@@ -1,0 +1,204 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-lg-10">
+			<h2 class="col-lg-10">#{msg['menu.profile.vacations']}</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="ibox">
+			<div class="ibox-content">
+				<h:form id="vacationsForm">
+					<p:dataTable id="vacationsTable" widgetVar="vacationsTable" var="vacation" binding="#{vacationsController.datatable}"
+						value="#{vacationsController.userVacations}" rowKey="#{vacation.id}"
+						rows="10" paginator="true" paginatorAlwaysVisible="false"
+						paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+						rowsPerPageTemplate="5,10,25,50,75"
+						rowsPerPageLabel="Número de ausencias por página: "
+						emptyMessage="#{msg['vacations.empty']}"
+						lazy="true">						
+						<f:facet name="header">
+							#{msg['vacations.actual']}
+						</f:facet>
+						
+						<p:column id="startDateColumn" headerText="#{msg['vacations.startDate']}"
+							styleClass="col-md-2">
+							<h:outputText value="#{vacation.startDate}" converter="localDateConverter" />
+						</p:column>
+						<p:column id="endDateColumn" headerText="#{msg['vacations.endDate']}"
+							styleClass="col-md-2">
+							<h:outputText value="#{vacation.endDate}" converter="localDateConverter" />
+						</p:column>
+						<p:column id="daysColumn" headerText="#{msg['vacations.days']}"
+							styleClass="col-md-2">
+							<h:outputText value="#{vacationsController.getDays(vacation)}" />
+						</p:column>
+						<p:column id="yearColumn" headerText="#{msg['vacations.year']}"
+							styleClass="col-md-2">
+							<h:outputText value="#{vacation.year}" />
+						</p:column>
+						<p:column id="approbedColumn" headerText="#{msg['vacations.status']}"
+							styleClass="col-md-2">
+							<p:outputPanel rendered="#{vacation.approved}" layout="inline" styleClass="label label-success">
+								<h:outputText value="#{msg['vacations.approbed']}" />
+							</p:outputPanel>
+							<p:outputPanel rendered="#{!vacation.approved}" layout="inline" styleClass="label label-danger">
+								<h:outputText value="#{msg['vacations.rejected']}" />
+							</p:outputPanel>
+						</p:column>
+						<p:column id="editColumn" styleClass="icon-column">
+							<p:commandButton title="Editar" update="vacationsForm editVacationForm" process="@form" 
+								disabled="#{vacation.startDate gt vacationsController.currentDate and vacation.endDate lt vacationsController.currentDate}"
+								styleClass="table-button" icon="fa fa-edit"
+								actionListener="#{vacationsController.setSelectedVacation(vacation)}" oncomplete="PF('editVacationDialog').show()" />
+						</p:column>
+						<p:column id="deleteColumn" styleClass="icon-column">
+							<p:commandButton title="Eliminar" update="vacationsForm" process="@form"
+								disabled="#{vacation.startDate gt vacationsController.currentDate and vacation.endDate lt vacationsController.currentDate}"
+								styleClass="table-button" icon="fa fa-remove"
+								actionListener="#{vacationsController.removeVacation(vacation)}" />
+						</p:column>						
+					</p:dataTable>
+					<div class="hr-line-dashed"></div>
+					<div class="pull-left">
+						<h:outputFormat value="#{msg['vacations.left']}">
+							<f:param value="#{vacationsController.currentVacationDays}" />
+						</h:outputFormat>
+					</div>
+					<p:commandButton id="editBtn" value="#{msg['vacations.new']}" type="button"
+							onclick="PF('newVacationDialog').show()"
+							styleClass="btn btn-primary col-xs-12 col-md-2 pull-right waves-effect waves-light" />
+					<div class="clearfix"></div>
+				</h:form>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-content">
+				<p:dataTable id="histVacationsTable" widgetVar="histVacationsTable" var="vacation" binding="#{vacationsController.histDatatable}"
+					value="#{vacationsController.histVacations}" rowKey="#{vacation.id}"
+					rows="10" paginator="true" paginatorAlwaysVisible="false"
+					paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+					rowsPerPageTemplate="5,10,25,50,75"
+					rowsPerPageLabel="Número de ausencias por página: "
+					emptyMessage="#{msg['vacations.empty']}"
+					lazy="true">						
+					<f:facet name="header">
+						#{msg['vacations.historical']}
+					</f:facet>
+					
+					<p:column id="startDateColumn" headerText="#{msg['vacations.startDate']}"
+						styleClass="col-md-2">
+						<h:outputText value="#{vacation.startDate}" converter="localDateConverter" />
+					</p:column>
+					<p:column id="endDateColumn" headerText="#{msg['vacations.endDate']}"
+						styleClass="col-md-2">
+						<h:outputText value="#{vacation.endDate}" converter="localDateConverter" />
+					</p:column>
+					<p:column id="yearColumn" headerText="#{msg['vacations.year']}"
+						styleClass="col-md-2">
+						<h:outputText value="#{vacation.year}" />
+					</p:column>
+					<p:column id="daysColumn" headerText="#{msg['vacations.days']}"
+						styleClass="col-md-2">
+						<h:outputText value="#{vacationsController.getDays(vacation)}" />
+					</p:column>
+					<p:column id="approbedColumn" headerText="#{msg['vacations.status']}"
+						styleClass="col-md-2">
+						<p:outputPanel rendered="#{vacation.approved}" layout="inline" styleClass="label label-success">
+							<h:outputText value="#{msg['vacations.approbed']}" />
+						</p:outputPanel>
+						<p:outputPanel rendered="#{!vacation.approved}" layout="inline" styleClass="label label-danger">
+							<h:outputText value="#{msg['vacations.rejected']}" />
+						</p:outputPanel>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</p:panel>
+	<h:form id="newVacationForm" styleClass="form-horizontal form-label-left">
+		<p:dialog id="newVacationDialog" widgetVar="newVacationDialog" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade">
+			<f:facet name="header">
+				#{msg['vacations.new']}
+			</f:facet>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newVacationStartDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['vacations.startDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="newVacationStartDate" value="#{vacationsController.newVacation.startDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newVacationEndDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['vacations.endDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="newVacationEndDate" value="#{vacationsController.newVacation.endDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newVacationYear" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['vacations.year']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:inputText id="newVacationYear" value="#{vacationsController.newVacation.year}" type="number" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+			<f:facet name="footer">
+				<p:commandButton id="saveBtn" value="#{msg['vacations.save']}"
+					action="#{vacationsController.createVacation()}" oncomplete="PF('newVacationDialog').hide()"
+					update="vacationsForm newVacationForm"
+					styleClass="btn btn-primary col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<p:commandButton id="cancelNewVacationBtn" value="#{msg['vacations.cancel']}" type="button"
+					onclick="PF('newVacationDialog').hide()"
+					styleClass="btn btn-primary bgm-gray col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<div class="clearfix"></div>
+			</f:facet>		
+		</p:dialog>
+	</h:form>
+	<h:form id="editVacationForm" styleClass="form-horizontal form-label-left">
+		<p:dialog id="editVacationDialog" widgetVar="editVacationDialog" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade">
+			<f:facet name="header">
+				#{msg['vacations.edit']}
+			</f:facet>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="editVacationStartDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['vacations.startDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="editVacationStartDate" value="#{vacationsController.selectedVacation.startDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="editVacationEndDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['vacations.endDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="editVacationEndDate" value="#{vacationsController.selectedVacation.endDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>			
+			<f:facet name="footer">
+				<p:commandButton id="saveEditBtn" value="#{msg['vacations.save']}"
+					action="#{vacationsController.updateVacation()}" oncomplete="PF('editVacationDialog').hide()"
+					update="vacationsForm"
+					styleClass="btn btn-primary col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<p:commandButton id="cancelEditVacationBtn" value="#{msg['vacations.cancel']}" type="button"
+					onclick="PF('editVacationDialog').hide()"
+					styleClass="btn btn-primary bgm-gray col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<div class="clearfix"></div>
+			</f:facet>		
+		</p:dialog>
+	</h:form>
+</ui:composition>

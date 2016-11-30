@@ -1,0 +1,366 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-lg-10">
+			<h2 class="col-lg-10">#{msg['menu.profile.timesheet']}</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="ibox">
+			<div class="ibox-content">
+				<h:form id="actualTimesheetForm">
+					<div class="row timesheet-title">
+						<div class="col-xs-12 div-header">
+							<h:outputText value="#{msg['timesheets.actual.title']}" />
+						</div>
+					</div>
+					<div class="row timesheet-header hidden-xs hidden-sm">
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.monday']}" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.tuesday']}" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.wednesday']}" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.thursday']}" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.friday']}" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.saturday']}" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.sunday']}" />
+						</div>
+					</div>
+					<p:panel class="row timesheet-body" rendered="#{not empty timesheetController.actualTimesheet}">
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.monday']}: #{timesheetController.actualTimesheet.mondayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.mondayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.tuesday']}: #{timesheetController.actualTimesheet.tuesdayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.tuesdayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.wednesday']}: #{timesheetController.actualTimesheet.wednesdayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.wednesdayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.thursday']}: #{timesheetController.actualTimesheet.thursdayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.thursdayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.friday']}: #{timesheetController.actualTimesheet.fridayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.fridayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.saturday']}: #{timesheetController.actualTimesheet.saturdayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.saturdayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+						<div class="col-xs-12 col-md-div-7">
+							<h:outputText value="#{msg['timesheets.sunday']}: #{timesheetController.actualTimesheet.sundayHours}" 
+								styleClass="visible-xs visible-sm" />
+							<h:outputText value="#{timesheetController.actualTimesheet.sundayHours}" styleClass="hidden-xs hidden-sm" />
+						</div>
+					</p:panel>
+					<p:panel styleClass="row timesheet-body" rendered="#{empty timesheetController.actualTimesheet}">
+						<div class="col-xs-12 timesheet-empty">
+							<h:outputText value="#{msg['timesheets.actual.empty']}" />
+						</div>
+					</p:panel>
+					<p:panel styleClass="row timesheet-dates" rendered="#{not empty timesheetController.actualTimesheet}">
+						<div class="col-xs-12 text-left">
+							<h:outputText value="#{msg['timesheets.period']}:  " styleClass="font-bold"/>
+							<h:outputText value="#{timesheetController.actualTimesheet.startDate}" converter="localDateConverter" />
+							<h:outputText value=" - " />
+							<h:outputText value="#{timesheetController.actualTimesheet.endDate}" converter="localDateConverter" />
+						</div>
+					</p:panel>
+					<div class="hr-line-dashed"></div>
+					<p:commandButton id="editBtn" value="#{msg['timesheets.edit']}"
+							actionListener="#{timesheetController.setSelectedTimesheet(timesheetController.actualTimesheet)}"
+							update="timesheetsForm editTimesheetForm"
+							oncomplete="PF('editTimesheetDialog').show()"
+							styleClass="btn btn-primary col-xs-12 col-md-2 pull-right waves-effect waves-light" />
+					<div class="clearfix"></div>
+				</h:form>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-content">
+				<h:form id="timesheetsForm">
+					<p:dataTable id="timesheetsTable" widgetVar="timesheetTable" var="timesheet" binding="#{timesheetController.datatable}"
+						value="#{timesheetController.timesheets}" rowKey="#{timesheet.id}"
+						rows="10" paginator="true" paginatorAlwaysVisible="false"
+						paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+						rowsPerPageTemplate="5,10,25,50,75"
+						rowsPerPageLabel="Número de horarios por página: "
+						emptyMessage="#{msg['timesheets.empty']}"
+						lazy="true">						
+						<f:facet name="header">
+							Horarios
+						</f:facet>
+						
+						<p:column id="startDateColumn" headerText="#{msg['timesheets.actual.startDate']}">
+							<h:outputText value="#{timesheet.startDate}" converter="localDateConverter" />
+						</p:column>
+						<p:column id="endDateColumn" headerText="#{msg['timesheets.actual.endDate']}">
+							<h:outputText value="#{timesheet.endDate}" converter="localDateConverter" />
+						</p:column>
+						<p:column id="mondayColumn" headerText="#{msg['timesheets.monday']}">
+							<h:outputText value="#{timesheet.mondayHours}" />
+						</p:column>
+						<p:column id="tuesdayColumn" headerText="#{msg['timesheets.tuesday']}">
+							<h:outputText value="#{timesheet.tuesdayHours}" />
+						</p:column>
+						<p:column id="wednesdayColumn" headerText="#{msg['timesheets.wednesday']}">
+							<h:outputText value="#{timesheet.wednesdayHours}" />
+						</p:column>
+						<p:column id="thursdayColumn" headerText="#{msg['timesheets.thursday']}">
+							<h:outputText value="#{timesheet.thursdayHours}" />
+						</p:column>
+						<p:column id="fridayColumn" headerText="#{msg['timesheets.friday']}">
+							<h:outputText value="#{timesheet.fridayHours}" />
+						</p:column>
+						<p:column id="saturdayColumn" headerText="#{msg['timesheets.saturday']}">
+							<h:outputText value="#{timesheet.saturdayHours}" />
+						</p:column>
+						<p:column id="sundayColumn" headerText="#{msg['timesheets.sunday']}">
+							<h:outputText value="#{timesheet.sundayHours}" />
+						</p:column>
+						<p:column id="editColumn" styleClass="icon-column">
+							<p:commandButton title="Editar" update="timesheetsForm editTimesheetForm" process="@form" 
+								disabled="#{timesheet.startDate le timesheetController.currentDate and timesheet.endDate ge timesheetController.currentDate}"
+								styleClass="table-button" icon="fa fa-edit"
+								actionListener="#{timesheetController.setSelectedTimesheet(timesheet)}" oncomplete="PF('editTimesheetDialog').show()" />
+						</p:column>
+						<p:column id="deleteColumn" styleClass="icon-column">
+							<p:commandButton title="Eliminar" update="timesheetsForm" process="@form"
+								disabled="#{timesheet.startDate le timesheetController.currentDate and timesheet.endDate ge timesheetController.currentDate}"
+								styleClass="table-button" icon="fa fa-remove"
+								actionListener="#{timesheetController.removeTimesheet(timesheet)}" />
+						</p:column>
+						
+					</p:dataTable>
+					<div class="hr-line-dashed"></div>
+					<p:commandButton id="editBtn" value="#{msg['timesheets.new']}" type="button"
+							onclick="PF('newTimesheetDialog').show()"
+							styleClass="btn btn-primary col-xs-12 col-md-2 pull-right waves-effect waves-light" />
+					<div class="clearfix"></div>
+				</h:form>
+			</div>
+		</div>
+	</p:panel>
+	<h:form id="newTimesheetForm" styleClass="form-horizontal form-label-left">
+		<p:dialog id="newTimesheetDialog" widgetVar="newTimesheetDialog" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade">
+			<f:facet name="header">
+				Nuevo Horario
+			</f:facet>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="newTimesheetStartDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['timesheets.actual.startDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="newTimesheetStartDate" value="#{timesheetController.newTimesheet.startDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="newTimesheetEndDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['timesheets.actual.endDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="newTimesheetEndDate" value="#{timesheetController.newTimesheet.endDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetMonday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.monday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetMonday" value="#{timesheetController.newTimesheet.mondayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetTuesday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.tuesday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetTuesday" value="#{timesheetController.newTimesheet.tuesdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetWednesday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.wednesday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetWednesday" value="#{timesheetController.newTimesheet.wednesdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetThursday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.thursday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetThursday" value="#{timesheetController.newTimesheet.thursdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetFriday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.friday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetFriday" value="#{timesheetController.newTimesheet.fridayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetSaturday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.saturday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetSaturday" value="#{timesheetController.newTimesheet.saturdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="newTimesheetSunday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.sunday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="newTimesheetSunday" value="#{timesheetController.newTimesheet.sundayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>			
+			<f:facet name="footer">
+				<p:commandButton id="saveBtn" value="#{msg['timesheets.save']}"
+					action="#{timesheetController.createTimesheet()}" oncomplete="PF('newTimesheetDialog').hide()"
+					update="actualTimesheetForm timesheetsForm newTimesheetForm"
+					styleClass="btn btn-primary col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<p:commandButton id="cancelNewTimesheetBtn" value="#{msg['timesheets.cancel']}" type="button"
+					onclick="PF('newTimesheetDialog').hide()"
+					styleClass="btn btn-primary bgm-gray col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<div class="clearfix"></div>
+			</f:facet>		
+		</p:dialog>
+	</h:form>
+	
+	<h:form id="editTimesheetForm" styleClass="form-horizontal form-label-left">
+		<p:dialog id="editTimesheetDialog" widgetVar="editTimesheetDialog" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade">
+			<f:facet name="header">
+				Editar Horario
+			</f:facet>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="editTimesheetStartDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['timesheets.actual.startDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="editTimesheetStartDate" value="#{timesheetController.selectedTimesheet.startDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-md-6">
+							<p:outputLabel for="editTimesheetEndDate" styleClass="col-xs-12 col-md-4 control-label" value="#{msg['timesheets.actual.endDate']}" />
+							<div class="col-xs-12 col-md-8">
+								<p:calendar id="editTimesheetEndDate" value="#{timesheetController.selectedTimesheet.endDate}"
+								converter="localDateConverter" locale="es" pattern="dd/MM/yyyy"/>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetMonday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.monday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetMonday" value="#{timesheetController.selectedTimesheet.mondayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetTuesday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.tuesday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetTuesday" value="#{timesheetController.selectedTimesheet.tuesdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetWednesday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.wednesday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetWednesday" value="#{timesheetController.selectedTimesheet.wednesdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetThursday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.thursday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetThursday" value="#{timesheetController.selectedTimesheet.thursdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetFriday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.friday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetFriday" value="#{timesheetController.selectedTimesheet.fridayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetSaturday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.saturday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetSaturday" value="#{timesheetController.selectedTimesheet.saturdayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>
+						<div class="form-group col-xs-12">
+							<p:outputLabel for="editTimesheetSunday" styleClass="col-xs-12 col-md-4 col-lg-3 col-xl-2 control-label"
+								value="#{msg['timesheets.sunday']}" />
+							<div class="col-xs-12 col-md-8 col-lg-9 col-xl-10">
+								<p:inputText id="editTimesheetSunday" value="#{timesheetController.selectedTimesheet.sundayHours}"
+									type="number" min="0" step="any" />
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>			
+			<f:facet name="footer">
+				<p:commandButton id="saveBtn" value="#{msg['timesheets.save']}"
+					action="#{timesheetController.updateTimesheet()}" oncomplete="PF('editTimesheetDialog').hide()"
+					update="actualTimesheetForm timesheetsForm"
+					styleClass="btn btn-primary col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<p:commandButton id="canceleditTimesheetBtn" value="#{msg['timesheets.cancel']}" type="button"
+					onclick="PF('editTimesheetDialog').hide()"
+					styleClass="btn btn-primary bgm-gray col-xs-12 col-md-2 col-xl-1 pull-right waves-effect waves-light" />
+				<div class="clearfix"></div>
+			</f:facet>		
+		</p:dialog>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-lg-10">
+			<h2 class="col-lg-10">#{msg['menu.projects.newProject']}</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<h:form id="newProjectForm">
+			<div class="row">
+				<div class="col-xs-6 col-md-3 col-md-offset-3 img-button-container">
+					<p:commandButton styleClass="report-button" value="Metrica V3"
+						action="#{newProjectController.createMetricaV3Project()}" update="createProjectForm"
+						oncomplete="PF('wizard').loadStep(PF('wizard').cfg.steps[0], true)" />
+				</div>
+				<div class="col-xs-6 col-md-3 img-button-container">
+					<p:commandButton styleClass="report-button" value="Scrum"
+						action="#{newProjectController.createScrumProject()}" update="createProjectForm"
+						oncomplete="PF('wizard').loadStep(PF('wizard').cfg.steps[0], true)" />
+				</div>
+			</div>
+		</h:form>
+		<h:form id="createProjectForm">
+			<p:panel id="wizardPanel" rendered="#{newProjectController.showMetricaWizard or newProjectController.showScrumWizard}" class="row">
+				<div class="col-xs-12">
+					<div class="ibox">
+						<div class="ibox-content">
+							<p:wizard id="wizard" widgetVar="wizard" flowListener="#{newProjectController.wizardFlow}" showNavBar="false">
+								<p:tab id="projectInfoTab" title="Información">
+									<ui:include src="new/infoTab.xhtml" />
+								</p:tab>
+								<p:tab id="projectDetailsTab" title="Detalles">
+									<p:panel id="scrumDetailPanel" rendered="#{newProjectController.showScrumWizard}">
+										<ui:include src="new/scrumDetailsTab.xhtml" />
+									</p:panel>
+									<p:panel id="metrica3DetailPanel" rendered="#{newProjectController.showMetricaWizard}">
+										<ui:include src="new/metricav3DetailsTab.xhtml" />
+									</p:panel>
+								</p:tab>
+								<p:tab id="projectOverviewTab" title="Resumen">
+									<p:panel id="metrica3OverviewPanel" rendered="#{newProjectController.showMetricaWizard}">
+										<ui:include src="new/metricav3OverviewTab.xhtml" />
+									</p:panel>
+									<p:panel id="scrumOverviewPanel" rendered="#{newProjectController.showScrumWizard}">
+										<ui:include src="new/scrumOverviewTab.xhtml" />
+									</p:panel>
+								</p:tab>
+							</p:wizard>
+							<div class="ui-wizard-navbar ui-helper-clearfix">
+								<p:commandButton id="wizard_back" type="button" styleClass="btn-primary ui-button ui-widget ui-state-default ui-corner-all ui-wizard-nav-back ui-state-disabled" 
+									icon="fa fa-angle-left" iconPos="left" value="#{msg['wizard.back.button']}" onclick="PF('wizard').back()" />
+								<p:commandButton id="wizard_next" type="button" styleClass="btn-primary ui-button ui-widget ui-state-default ui-corner-all ui-wizard-nav-next waves-effect" 
+									icon="fa fa-angle-right" iconPos="right" value="#{msg['wizard.next.button']}" onclick="PF('wizard').next()" />
+								<p:commandButton id="wizard_submit" type="submit" styleClass="btn-primary ui-button ui-widget ui-helper-hidden ui-state-default ui-corner-all ui-wizard-nav-next waves-effect"
+									icon="fa fa-save" iconPos="right" value="#{msg['wizard.submit.button']}" action="#{newProjectController.createProject()}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+	</p:panel>
+</ui:composition>

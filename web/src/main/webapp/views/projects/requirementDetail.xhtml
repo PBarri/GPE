@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:gpe="http://gpe.org/ui">
+	<p:panel id="main-title"
+		styleClass="row wrapper border-bottom white-bg page-heading">
+		<div class="col-xs-12">
+			<h2 class="col-xs-12">
+				<h:outputFormat value="#{msg['menu.projects.requirement.details']}" rendered="#{requirementDetailsController.requirement.project.metricaV3}">
+					<f:param value="#{requirementDetailsController.requirement.requirementCode}" />
+				</h:outputFormat>
+				<h:outputFormat value="#{msg['menu.projects.iteration.details']}" rendered="#{requirementDetailsController.requirement.project.scrum}">
+					<f:param value="#{requirementDetailsController.requirement.requirementCode}" />
+				</h:outputFormat>
+			</h2>
+		</div>
+	</p:panel>
+	<p:panel id="main-content" styleClass="wrapper wrapper-content">
+		<div class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>#{msg['projects.detail.overview.title']}</h5>
+				<div class="ibox-tools"></div>
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<p:panel id="overview-logo-container" styleClass="project-logo-container col-xs-12 col-md-2"
+					 	rendered="#{empty requirementDetailsController.requirement.project.projectLogo}">
+						<div id="overview-logo" class="square-box">
+							<div class="square-content">
+								<div class="project-logo-avatar" style="padding-top: 30%">
+									<h:outputText value="#{requirementDetailsController.requirement.project.projectTitle}" />
+								</div>
+							</div>
+						</div>						
+					</p:panel>
+					<p:panel rendered="#{not empty requirementDetailsController.requirement.project.projectLogo}">
+						<div class="col-xs-12 col-md-2">
+							<p:graphicImage value="#{requirementDetailsController.requirement.project.projectLogo}" styleClass="img-responsive" />
+						</div>
+					</p:panel>
+					<div id="overview-project" class="col-xs-12 col-md-10">
+						<div class="row">
+							<div class="horizontal-form without-padding">
+								<div class="form-group col-xs-12 col-md-6">
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.projectName']}"
+										for="projectInfoName" />
+									<div class="col-xs-8">
+										<p:inputText id="projectInfoName" disabled="true"
+											value="#{requirementDetailsController.requirement.project.name}" />
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.reqName']}"
+										for="requirementName" rendered="#{requirementDetailsController.requirement.project.metricaV3}" />
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.itName']}"
+										for="requirementName" rendered="#{requirementDetailsController.requirement.project.scrum}" />
+									<div class="col-xs-8">
+										<p:inputText id="requirementName" disabled="true"
+											value="#{requirementDetailsController.requirement.name}" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-xs-12 col-md-6">
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.reqCode']}"
+										for="requirementCode" rendered="#{requirementDetailsController.requirement.project.metricaV3}" />
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.itCode']}"
+										for="requirementCode" rendered="#{requirementDetailsController.requirement.project.scrum}" />
+									<div class="col-xs-8">
+										<p:inputText id="requirementCode" disabled="true"
+											value="#{requirementDetailsController.requirement.requirementCode}" />
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.cvsCode']}"
+										for="reqCvsCode" />
+									<div class="col-xs-8">
+										<p:inputText id="reqCvsCode" disabled="true"
+											value="#{requirementDetailsController.requirement.cvsCode}" />
+									</div>
+								</div>
+							</div>
+							<div class="row">						
+								<div class="form-group col-xs-12 col-md-6">
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.startDate']}"
+										for="reqStartDate" />
+									<div class="col-xs-8">
+										<p:inputText id="reqStartDate" disabled="true"
+											value="#{requirementDetailsController.requirement.startDate}" converter="localDateConverter" />
+									</div>
+								</div>
+								<div class="form-group col-xs-12 col-md-6">
+									<p:outputLabel styleClass="control-label col-xs-4"
+										value="#{msg['requirement.detail.endDate']}"
+										for="reqEndDate" />
+									<div class="col-xs-8">
+										<p:inputText id="reqEndDate" disabled="true"
+											value="#{requirementDetailsController.requirement.endDate}" converter="localDateConverter" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>#{msg['projects.new.wizard.metrica.developers']}</h5>
+				<div class="ibox-tools">
+					<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+				<gpe:cardList id="reqDevelopers">
+					<gpe:cards type="user" cardStyle="col-xs-12 col-md-4 col-lg-3" value="#{requirementDetailsController.requirement.developers}" />
+					<div class="clearfix"></div>
+				</gpe:cardList>
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>#{msg['projects.detail.documents.title']}</h5>
+				<div class="ibox-tools">
+					<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+			
+			</div>
+		</div>
+		<div class="ibox">
+			<div class="ibox-title float-e-margins">
+				<h5>#{msg['menu.tasks']}</h5>
+				<div class="ibox-tools">
+					<h:form id="reqTaskListForm">
+						<a class="collapse-link"><i class="fa fa-chevron-up" /></a>
+					</h:form>
+				</div>
+			</div>
+			<div class="ibox-content">				
+				<h:form id="taskDetailsForm">
+					<p:commandButton type="button" icon="fa fa-plus" styleClass="add-datatable-button" />
+					<p:dataTable id="tasksTable" widgetVar="tasksTable"
+						var="task" value="#{requirementDetailsController.requirementParentTasks}"
+						rowKey="#{task.id}" rows="10" paginator="true"
+						paginatorAlwaysVisible="true"
+						paginatorTemplate="{GPEPaginator} {FirstPage} {PreviousPage} {PageLinks} {NextPage} {LastPage}"
+						rowsPerPageTemplate="5,10,25,50,75"
+						rowsPerPageLabel="Número de requerimientos por página: "
+						emptyMessage="No existen tareas para mostrar"
+						selectionMode="single" lazy="true">
+	
+						<p:column id="codeColumn" headerText="#{msg['tasks.list.code']}">
+							<h:outputText value="#{task.code}" />
+						</p:column>
+
+						<p:column id="nameColumn" headerText="#{msg['tasks.list.name']}">
+							<h:outputText value="#{task.name}" />
+						</p:column>
+						
+						<p:column id="taskTypeColumn"
+							headerText="#{msg['tasks.list.taskType']}">
+							<h:outputText value="#{msg[task.taskType.description]}" />
+						</p:column>
+						
+						<p:column id="priorityColumn"
+							headerText="#{msg['tasks.list.taskPriority']}">
+							<h:outputText value="#{msg[task.taskPriority.description]}" />
+						</p:column>
+
+						<p:column id="percentageColumn"
+							headerText="#{msg['tasks.list.percentage']}">
+							<h:outputText value="#{task.hours}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="taskStatusColumn"
+							headerText="#{msg['tasks.list.taskStatus']}">
+							<h:outputText value="#{msg[task.taskStatus.description]}" />
+						</p:column>					
+
+						<p:column id="startDateColumn"
+							headerText="#{msg['tasks.list.startDate']}">
+							<h:outputText value="#{task.startDate}" converter="localDateTimeConverter" />
+						</p:column>
+
+						<p:column id="endDateColumn"
+							headerText="#{msg['tasks.list.endDate']}">
+							<h:outputText value="#{task.endDate}" converter="localDateTimeConverter" />
+						</p:column>
+						
+						<p:column id="detailsColumn" styleClass="icon-column">
+							<p:commandButton title="Detalles" update="layoutCenter" process="@form"
+								styleClass="table-button" icon="fa fa-list-alt"
+								actionListener="#{taskDetailsController.goToTaskDetails(task)}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>				
+			</div>
+		</div>
+	</p:panel>
+</ui:composition>

@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.metrica.leader']}"
+					for="projectLeader" />
+				<div class="col-xs-8">
+					<p:selectOneMenu id="projectLeader"
+						value="#{newProjectController.leader}" tabindex="6"
+						styleClass="form-control" converter="baseEntityConverter">
+						<f:selectItem
+							itemLabel="#{msg['projects.list.filters.projectLeader.noSelectOption']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{newProjectController.projectLeaders}"
+							var="leader" itemValue="#{leader}"
+							itemLabel="#{leader.name} #{leader.surname}" />
+					</p:selectOneMenu>
+
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label" for="projectManagerFilter"
+					value="#{msg['projects.new.wizard.metrica.manager']}" />
+				<div class="col-xs-8">
+					<p:selectCheckboxMenu id="projectManagerFilter"
+						label="Responsables" value="#{newProjectController.managers}"
+						tabindex="7" converter="baseEntityConverter"
+						styleClass="form-control">
+						<f:selectItems value="#{newProjectController.projectManagers}"
+							var="manager" itemValue="#{manager}"
+							itemLabel="#{manager.name} #{manager.surname}" />
+					</p:selectCheckboxMenu>
+				</div>
+			</div>
+
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label" for="projectDevelopersFilter"
+					value="#{msg['projects.new.wizard.metrica.developers']}" />
+				<div class="col-xs-8">
+					<p:selectCheckboxMenu id="projectDevelopersFilter"
+						label="Desarrolladores" value="#{newProjectController.developers}"
+						tabindex="8" converter="baseEntityConverter"
+						styleClass="form-control" filter="true" filterMatchMode="contains">
+						<f:selectItems value="#{newProjectController.projectDevelopers}"
+							var="dev" itemValue="#{dev}"
+							itemLabel="#{dev.name} #{dev.surname}" />
+					</p:selectCheckboxMenu>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.requirementCode']}"
+					for="requirementCode" />
+				<div class="col-xs-8">
+					<p:inputText id="requirementCode"
+						value="#{newProjectController.newRequirement.requirementCode}"
+						tabindex="9" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.requirement.name']}"
+					for="requirementName" />
+				<div class="col-xs-8">
+					<p:inputText id="requirementName"
+						value="#{newProjectController.newRequirement.name}" tabindex="10" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.requirement.hours']}"
+					for="requirementHours" />
+				<div class="col-xs-8">
+					<p:inputText id="requirementHours" type="number"
+						value="#{newProjectController.newRequirement.hours}" tabindex="11" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.requirement.cvsCode']}"
+					for="requirementCvsCode" />
+				<div class="col-xs-8">
+					<p:inputText id="requirementCvsCode"
+						value="#{newProjectController.newRequirement.cvsCode}"
+						tabindex="12" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.startDate']}" for="reqStartDate" />
+				<div class="col-xs-8">
+					<p:calendar id="reqStartDate" locale="es" pattern="dd/MM/yyyy"
+						converter="localDateConverter"
+						value="#{newProjectController.newRequirement.startDate}"
+						tabindex="13" />
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-md-4">
+				<p:outputLabel styleClass="col-xs-4 control-label"
+					value="#{msg['projects.new.wizard.endDate']}" for="reqEndDate" />
+				<div class="col-xs-8">
+					<p:calendar id="reqEndDate" locale="es" pattern="dd/MM/yyyy"
+						converter="localDateConverter"
+						value="#{newProjectController.newRequirement.endDate}"
+						tabindex="14" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</ui:composition>

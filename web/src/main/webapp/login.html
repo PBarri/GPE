@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPE</title>
+
+<!-- Material Design Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+<!-- Roboto Font -->
+<link
+	href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700'
+	rel='stylesheet' type='text/css'>
+
+<!-- Material Design Bootstrap -->
+<link href="css/login.min.css" rel="stylesheet">
+</head>
+<body>
+
+	<!-- Intro image -->
+	<section class="full-bg-img">
+		<div class="view">
+			<div class="mask rgba-black-slight">
+				<div class="container">
+					<div class="verticalcenter intro text-center white-text">
+						<div class="row wow fadeInUp">
+							<h2>GPE</h2>
+							<hr class="divider-medium">
+						</div>
+						<div class="row wow fadeInUp" data-wow-delay="0.4s">
+							<div
+								class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+								<form th:action="@(/j_spring_security_check)" method="post"
+									class="login">
+									<div class="input-field col-xs-12">
+										<input id="username" name="username" type="text"
+											class="validate"> <label for="username">Usuario</label>
+									</div>
+									<div class="input-field col-xs-12">
+										<input id="password" name="password" type="password"
+											class="validate"> <label for="password">Contraseña</label>
+									</div>
+									<div class="col-xs-12">
+										<div class="col-xs-12 col-sm-6">
+											<button type="submit"
+												class="btn btn-primary waves-effect waves-light">LOGIN</button>
+										</div>
+										<div class="col-xs-12 col-sm-6">
+											<button type="button"
+												class="btn btn-primary waves-effect waves-light">RECORDAR
+												CONTRASEÑA</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--/. Intro image -->
+
+	<!-- Footer -->
+	<footer class="page-footer">
+		<!--Coprytights-->
+		<div class="footer-copyright text-center rgba-black-slight">
+			<div class="container-fluid">© 2016 Copyright: Pablo Barrientos
+			</div>
+		</div>
+		<!--/.Coprytights-->
+	</footer>
+	<!-- Footer -->
+
+	<!-- JQuery -->
+	<script type="text/javascript" src="js/login.min.js"></script>
+
+	<script type="text/javascript">
+		var getUrlParameter = function getUrlParameter(sParam) {
+		    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+		        sURLVariables = sPageURL.split('&'),
+		        sParameterName,
+		        i;
+	
+		    for (i = 0; i < sURLVariables.length; i++) {
+		        sParameterName = sURLVariables[i].split('=');
+	
+		        if (sParameterName[0] === sParam) {
+		            return sParameterName[1] === undefined ? true : sParameterName[1];
+		        }
+		    }
+		};
+		var opts = {
+			"closeButton": true,
+			"debug": false,
+			"positionClass": "toast-top-full-width toast-login",
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		};
+		$(document).ready(function(){
+			if(!!getUrlParameter('error')) {
+				toastr.error("LOGIN INCORRECTO", null, opts);
+				$(".wow").css("visibility", "visible");
+			} else {
+				new WOW().init();
+			}
+		});
+		
+	</script>
+</body>
+</html>

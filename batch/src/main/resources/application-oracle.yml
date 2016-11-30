@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@127.0.0.1:1521:xe
+    username: gpe_owner
+    password: gpe_owner
+    driver-class-name: oracle.jdbc.OracleDriver

@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:panel id="adminDashboard"
+		rendered="#{dashboardController.loggedUser.isAdministrator()}"
+		styleClass="wrapper wrapper-content">
+		<ui:include src="dashboard/admin.xhtml" />
+	</p:panel>
+	
+	<p:panel id="leaderDashboard"
+		rendered="#{dashboardController.loggedUser.isProjectLeader()}"
+		styleClass="wrapper wrapper-content">
+		<ui:include src="dashboard/leader.xhtml" />
+	</p:panel>
+	
+	<p:panel id="managerDashboard"
+		rendered="#{dashboardController.loggedUser.isProjectManager()}"
+		styleClass="wrapper wrapper-content">
+		<ui:include src="dashboard/manager.xhtml" />
+	</p:panel>
+	
+	<p:panel id="developerDashboard"
+		rendered="#{dashboardController.loggedUser.isDeveloper()}"
+		styleClass="wrapper wrapper-content">
+		<ui:include src="dashboard/developer.xhtml" />
+	</p:panel>
+</ui:composition>
